@@ -4,7 +4,9 @@
     "aPropos": "À propos",
     "actualites": "Actualités",
     "contact": "Contactez-nous",
-    "search": "Rechercher sur le site"
+    "search": "Rechercher sur le site",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
   },
   "footer": {
     "description": "La CNSS, c'est l'assurance d'une meilleure protection pour la vie. Nous sommes au service de la prévention des risques professionnels.",

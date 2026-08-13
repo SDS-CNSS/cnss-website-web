@@ -18,13 +18,13 @@ type MissionGouvernanceProps = {
 
 export function MissionGouvernance({ mission, gouvernance }: MissionGouvernanceProps) {
   return (
-    <section className="flex w-full items-stretch gap-24 bg-surface p-20">
-      <div className="relative w-full flex-1 overflow-hidden rounded-2xl shadow-[0px_4px_10px_0px_rgba(0,0,0,0.1)]">
+    <section className="flex w-full flex-col items-stretch gap-8 bg-surface p-6 sm:p-10 md:flex-row md:gap-6 lg:gap-24 lg:p-20">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-2xl shadow-[0px_4px_10px_0px_rgba(0,0,0,0.1)] md:aspect-auto md:w-auto md:flex-1">
         <Image src={mission.image.url} alt={mission.image.alt} fill className="object-cover" />
       </div>
       <div className="flex flex-1 flex-col items-stretch gap-6">
         <div className="flex flex-col items-stretch gap-2">
-          <h2 className="font-heading text-h2 font-bold text-primary-800">
+          <h2 className="font-heading text-h3 font-bold text-primary-800 md:text-h2">
             {mission.title}
           </h2>
           <RichContent
@@ -35,7 +35,7 @@ export function MissionGouvernance({ mission, gouvernance }: MissionGouvernanceP
           />
         </div>
         <div className="flex flex-col items-stretch gap-2 rounded-2xl bg-primary-800 p-4">
-          <h2 className="font-heading text-h2 font-bold text-[#EFF7FF]">
+          <h2 className="font-heading text-h3 font-bold text-[#EFF7FF] md:text-h2">
             {gouvernance.title}
           </h2>
           <RichContent

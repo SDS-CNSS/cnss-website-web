@@ -48,10 +48,10 @@ export function ActualitesCarousel() {
   };
 
   return (
-    <section className="flex w-full flex-col items-start gap-16 bg-surface p-20">
-      <div className="flex w-full items-center gap-2.5">
+    <section className="flex w-full flex-col items-start gap-10 bg-surface p-6 sm:p-10 lg:gap-16 lg:p-20">
+      <div className="flex w-full flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-2.5">
         <div className="flex flex-1 flex-col items-start gap-4">
-          <h2 className="font-heading text-h2 font-bold text-primary-800">
+          <h2 className="font-heading text-h3 font-bold text-primary-800 md:text-h2">
             Actualités
           </h2>
           <p className="text-paragraph-lg text-body">

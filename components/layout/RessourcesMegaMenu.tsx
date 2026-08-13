@@ -3,14 +3,10 @@
 import { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ChevronDown, File, FileImage } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
-
-const ITEMS = [
-  { icon: File, labelKey: "bibliotheque", href: "/bibliotheque" },
-  { icon: FileImage, labelKey: "mediatheque", href: "/mediatheque" },
-] as const;
+import { RESSOURCES_ITEMS as ITEMS } from "@/components/layout/navData";
 
 function isPathActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);

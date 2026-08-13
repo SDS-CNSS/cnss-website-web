@@ -58,7 +58,7 @@ export function StatCard({
   return (
     <div
       ref={ref}
-      className="flex w-[302px] flex-col items-center justify-center gap-2.5 rounded-[10px] border border-border-secondary bg-surface px-8 py-6 drop-shadow-[0px_1px_2px_rgba(0,0,0,0.1)] transition-[border-color,box-shadow] hover:border-primary hover:shadow-[0px_10px_10px_0px_rgba(0,0,0,0.03)]"
+      className="flex w-full flex-col items-center justify-center gap-2.5 rounded-[10px] border border-border-secondary bg-surface px-4 py-6 drop-shadow-[0px_1px_2px_rgba(0,0,0,0.1)] transition-[border-color,box-shadow] hover:border-primary hover:shadow-[0px_10px_10px_0px_rgba(0,0,0,0.03)] lg:px-8"
     >
       <p className="font-heading text-h3 font-semibold text-primary-400">
         {prefix}

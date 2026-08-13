@@ -23,9 +23,9 @@ export function Footer() {
   const t = useTranslations("footer");
 
   return (
-    <footer className="flex w-full flex-col items-center border-t-2 border-line bg-surface-light-2 px-20 pt-20">
-      <div className="flex w-full items-start justify-center gap-8">
-        <div className="flex flex-1 flex-col items-start gap-4 pb-[76px]">
+    <footer className="flex w-full flex-col items-center border-t-2 border-line bg-surface-light-2 px-4 pt-10 sm:px-6 md:px-10 lg:px-20 lg:pt-20">
+      <div className="flex w-full flex-col items-start gap-10 lg:flex-row lg:justify-center lg:gap-8">
+        <div className="flex w-full flex-col items-start gap-4 lg:flex-1 lg:pb-[76px]">
           <Logo />
           <p className="text-base font-medium text-body">{t("description")}</p>
           <div className="flex items-start gap-4">
@@ -48,7 +48,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col items-start gap-4">
+        <div className="flex w-full flex-col items-start gap-4 lg:flex-1">
           <h4 className="font-heading text-h5 font-semibold text-primary-800">
             {t("newsletter.title")}
           </h4>
@@ -81,7 +81,7 @@ export function Footer() {
           </form>
         </div>
 
-        <div className="flex w-[296px] flex-col items-start gap-4 pb-[52px]">
+        <div className="flex w-full flex-col items-start gap-4 lg:w-[296px] lg:pb-[52px]">
           <h4 className="font-heading text-h5 font-semibold text-primary-800">
             {t("quickLinksTitle")}
           </h4>
@@ -101,7 +101,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="flex flex-1 flex-col items-start gap-4 pb-16">
+        <div className="flex w-full flex-col items-start gap-4 lg:flex-1 lg:pb-16">
           <h4 className="font-heading text-h5 font-semibold text-primary-800">
             {t("contactsTitle")}
           </h4>
@@ -143,9 +143,9 @@ export function Footer() {
       </div>
 
       <div className="flex w-full flex-col items-start border-t border-primary-100">
-        <div className="flex w-full items-center justify-between py-4">
+        <div className="flex w-full flex-col items-start gap-3 py-4 md:flex-row md:items-center md:justify-between md:gap-0">
           <p className="text-base text-ink">{t("copyright")}</p>
-          <div className="flex items-start gap-6">
+          <div className="flex flex-wrap items-start gap-x-6 gap-y-2">
             {LEGAL_LINK_HREFS.map((link) => (
               <Link
                 key={link.href}

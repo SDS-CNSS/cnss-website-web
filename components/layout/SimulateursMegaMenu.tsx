@@ -6,68 +6,7 @@ import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
-
-type SimulateurItem = {
-  icon: string;
-  labelKey: string;
-  href: string;
-};
-
-type SimulateurTab = {
-  key: string;
-  labelKey: string;
-  items: SimulateurItem[];
-};
-
-const TABS: SimulateurTab[] = [
-  {
-    key: "cotisations",
-    labelKey: "tabs.cotisations.label",
-    items: [
-      {
-        icon: "/images/icon-charges-sociales-embauche.png",
-        labelKey: "tabs.cotisations.chargesSociales",
-        href: "/simulateurs/charges-sociales-embauche",
-      },
-      {
-        icon: "/images/icon-majoration-retard.png",
-        labelKey: "tabs.cotisations.majorationRetard",
-        href: "/simulateurs/majoration-retard",
-      },
-    ],
-  },
-  {
-    key: "pension",
-    labelKey: "tabs.pension.label",
-    items: [
-      {
-        icon: "/images/icon-pension-vieillesse.png",
-        labelKey: "tabs.pension.vieillesse",
-        href: "/simulateurs/pension",
-      },
-      {
-        icon: "/images/icon-pension-vieillesse-anticipee.png",
-        labelKey: "tabs.pension.vieillesseAnticipee",
-        href: "/simulateurs/pension-vieillesse-anticipee",
-      },
-      {
-        icon: "/images/icon-pension-survivants-conjoints.png",
-        labelKey: "tabs.pension.survivantsConjoints",
-        href: "/simulateurs/pension-survivants-conjoints",
-      },
-      {
-        icon: "/images/icon-pension-survivants-enfants.png",
-        labelKey: "tabs.pension.survivantsEnfants",
-        href: "/simulateurs/pension-survivants-enfants",
-      },
-      {
-        icon: "/images/icon-allocation-survivants.png",
-        labelKey: "tabs.pension.allocationSurvivants",
-        href: "/simulateurs/allocation-survivants",
-      },
-    ],
-  },
-];
+import { SIMULATEURS_TABS as TABS } from "@/components/layout/navData";
 
 function isPathActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);

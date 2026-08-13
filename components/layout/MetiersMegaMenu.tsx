@@ -6,77 +6,7 @@ import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
-
-type MegaMenuColumn = {
-  icon: string;
-  titleKey: string;
-  href?: string;
-  links?: { labelKey: string; href: string }[];
-};
-
-type MegaMenuTab = {
-  key: string;
-  labelKey: string;
-  columns: MegaMenuColumn[];
-};
-
-const TABS: MegaMenuTab[] = [
-  {
-    key: "recouvrement",
-    labelKey: "tabs.recouvrement.label",
-    columns: [
-      {
-        icon: "/images/icon-immatriculation.png",
-        titleKey: "tabs.recouvrement.immatriculation",
-        href: "/recouvrement/immatriculation",
-      },
-      {
-        icon: "/images/icon-declaration-cotisations.png",
-        titleKey: "tabs.recouvrement.declaration",
-        href: "/recouvrement/declaration-paiement-cotisations",
-      },
-      {
-        icon: "/images/icon-controle-employeur.png",
-        titleKey: "tabs.recouvrement.controle",
-        href: "/recouvrement/controle-employeur",
-      },
-    ],
-  },
-  {
-    key: "prestations",
-    labelKey: "tabs.prestations.label",
-    columns: [
-      {
-        icon: "/images/icon-prestations-familiales.png",
-        titleKey: "tabs.prestations.familialesTitle",
-        links: [
-          { labelKey: "tabs.prestations.allocationsFamiliales", href: "/prestations/allocations-familiales" },
-          { labelKey: "tabs.prestations.allocationsPrenatales", href: "/prestations/allocations-prenatales" },
-          { labelKey: "tabs.prestations.congeMaternite", href: "/prestations/conge-maternite" },
-          { labelKey: "tabs.prestations.actionSanitaire", href: "/prestations/action-sanitaire-sociale" },
-        ],
-      },
-      {
-        icon: "/images/icon-pensions.png",
-        titleKey: "tabs.prestations.vieillesseTitle",
-        links: [
-          { labelKey: "tabs.prestations.pensions", href: "/prestations/pensions" },
-          { labelKey: "tabs.prestations.pensionSurvivants", href: "/prestations/pension-survivants" },
-          { labelKey: "tabs.prestations.remboursement", href: "/prestations/remboursement-cotisations" },
-          { labelKey: "tabs.prestations.remariage", href: "/prestations/allocation-remariage" },
-        ],
-      },
-      {
-        icon: "/images/icon-accidents-travail.png",
-        titleKey: "tabs.prestations.risquesTitle",
-        links: [
-          { labelKey: "tabs.prestations.accidentTravail", href: "/prestations/accident-travail" },
-          { labelKey: "tabs.prestations.maladiesPro", href: "/prestations/maladies-professionnelles" },
-        ],
-      },
-    ],
-  },
-];
+import { METIERS_TABS as TABS } from "@/components/layout/navData";
 
 function IconChip({ src }: { src: string }) {
   return (
