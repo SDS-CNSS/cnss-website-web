@@ -2,25 +2,75 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #333333;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-raleway);
+  --font-heading: var(--font-alexandria);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Design tokens from Figma (Refonte Site Web CNSS) */
+  --color-primary: #0070ff;
+  --color-primary-hover: #005acc;
+  --color-primary-900: #002d66;
+  --color-primary-800: #004399;
+  --color-primary-200: #99c6ff;
+  --color-primary-100: #cce2ff;
+  --color-primary-400: #338dff;
+  --color-primary-600: #2e66ad;
+  --color-border-secondary: #5aafff;
+  --color-ink: #333333;
+  --color-body: #4d4d4d;
+  --color-muted: #999999;
+  --color-on-primary: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-light: #e5f1ff;
+  --color-surface-light-2: #ebf0f6;
+  --color-subtle: #f6f7f9;
+  --color-line: #e6e6e6;
+  --color-ink-soft: #464653;
+  --color-line-soft: #c6c5d5;
+  --color-link: #020061;
+  --color-badge-neutral-bg: #e5e2e1;
+  --color-badge-neutral-text: #1c1b1b;
+  --color-badge-warning-bg: #ffddb8;
+  --color-badge-warning-text: #653e00;
+  --color-alert-info-bg: #e6f3f9;
+  --color-alert-info-text: #014f77;
+  --color-surface-muted: #ecefee;
+  --color-warning: #d97706;
+
+  /* Typography scale from Figma (REPONSIVE tokens) */
+  --text-h1-lg: 4rem;
+  --text-h1-lg--line-height: 4.75rem;
+  --text-h1: 3rem;
+  --text-h1--line-height: 3.5rem;
+  --text-h2: 2.5rem;
+  --text-h2--line-height: 3rem;
+  --text-h3: 2rem;
+  --text-h3--line-height: 2.5rem;
+  --text-h4: 1.75rem;
+  --text-h4--line-height: 2rem;
+  --text-h5: 1.5rem;
+  --text-h5--line-height: 1.75rem;
+  --text-h6: 1.25rem;
+  --text-h6--line-height: 1.5rem;
+  --text-paragraph-xl: 1.25rem;
+  --text-paragraph-xl--line-height: 1.5rem;
+  --text-paragraph-lg: 1.125rem;
+  --text-paragraph-lg--line-height: 1.5rem;
+  --text-paragraph-md: 1rem;
+  --text-paragraph-md--line-height: 1.25rem;
+  --text-paragraph-sm: 0.875rem;
+  --text-paragraph-sm--line-height: 1rem;
+  --text-paragraph-xsm: 0.75rem;
+  --text-paragraph-xsm--line-height: 0.875rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
