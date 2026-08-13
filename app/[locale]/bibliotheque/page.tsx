@@ -8,6 +8,8 @@ import { DocumentCard } from "@/components/ui/DocumentCard";
 import { Pagination } from "@/components/ui/Pagination";
 import { getBibliothequeContent } from "@/lib/content/bibliotheque";
 
+type Props = PageProps<"/[locale]/bibliotheque">;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Bibliothèque | CNSS Bénin",
@@ -16,8 +18,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function BibliothequePage() {
-  const content = await getBibliothequeContent();
+export default async function BibliothequePage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getBibliothequeContent(locale);
 
   return (
     <>

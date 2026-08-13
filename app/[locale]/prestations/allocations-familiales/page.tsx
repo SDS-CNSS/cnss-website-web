@@ -9,16 +9,20 @@ import { MetierSection } from "@/components/metier/MetierSection";
 import { MetierLinksBox } from "@/components/metier/MetierLinksBox";
 import { getAllocationsFamilialesContent } from "@/lib/content/allocations-familiales";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getAllocationsFamilialesContent();
+type Props = PageProps<"/[locale]/prestations/allocations-familiales">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const content = await getAllocationsFamilialesContent(locale);
   return {
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
   };
 }
 
-export default async function AllocationsFamilialesPage() {
-  const content = await getAllocationsFamilialesContent();
+export default async function AllocationsFamilialesPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getAllocationsFamilialesContent(locale);
 
   return (
     <>

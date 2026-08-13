@@ -2,75 +2,76 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
 
 type MegaMenuColumn = {
   icon: string;
-  title: string;
+  titleKey: string;
   href?: string;
-  links?: { label: string; href: string }[];
+  links?: { labelKey: string; href: string }[];
 };
 
 type MegaMenuTab = {
   key: string;
-  label: string;
+  labelKey: string;
   columns: MegaMenuColumn[];
 };
 
 const TABS: MegaMenuTab[] = [
   {
     key: "recouvrement",
-    label: "Recouvrement",
+    labelKey: "tabs.recouvrement.label",
     columns: [
       {
         icon: "/images/icon-immatriculation.png",
-        title: "Immatriculation",
+        titleKey: "tabs.recouvrement.immatriculation",
         href: "/recouvrement/immatriculation",
       },
       {
         icon: "/images/icon-declaration-cotisations.png",
-        title: "Déclaration et paiement des cotisations",
+        titleKey: "tabs.recouvrement.declaration",
         href: "/recouvrement/declaration-paiement-cotisations",
       },
       {
         icon: "/images/icon-controle-employeur.png",
-        title: "Contrôle employeur",
+        titleKey: "tabs.recouvrement.controle",
         href: "/recouvrement/controle-employeur",
       },
     ],
   },
   {
     key: "prestations",
-    label: "Prestations",
+    labelKey: "tabs.prestations.label",
     columns: [
       {
         icon: "/images/icon-prestations-familiales.png",
-        title: "Prestations familiales et\nde maternité",
+        titleKey: "tabs.prestations.familialesTitle",
         links: [
-          { label: "Allocations familiales", href: "/prestations/allocations-familiales" },
-          { label: "Allocations prénatales", href: "/prestations/allocations-prenatales" },
-          { label: "Indemnités de congé de maternité", href: "/prestations/conge-maternite" },
-          { label: "Action sanitaire et sociale", href: "/prestations/action-sanitaire-sociale" },
+          { labelKey: "tabs.prestations.allocationsFamiliales", href: "/prestations/allocations-familiales" },
+          { labelKey: "tabs.prestations.allocationsPrenatales", href: "/prestations/allocations-prenatales" },
+          { labelKey: "tabs.prestations.congeMaternite", href: "/prestations/conge-maternite" },
+          { labelKey: "tabs.prestations.actionSanitaire", href: "/prestations/action-sanitaire-sociale" },
         ],
       },
       {
         icon: "/images/icon-pensions.png",
-        title: "Prestations de vieillesse",
+        titleKey: "tabs.prestations.vieillesseTitle",
         links: [
-          { label: "Pensions et allocations de vieillesse", href: "/prestations/pensions" },
-          { label: "Pensions et allocations de survivants", href: "/prestations/pension-survivants" },
-          { label: "Remboursement des cotisations", href: "/prestations/remboursement-cotisations" },
-          { label: "Allocation de remariage", href: "/prestations/allocation-remariage" },
+          { labelKey: "tabs.prestations.pensions", href: "/prestations/pensions" },
+          { labelKey: "tabs.prestations.pensionSurvivants", href: "/prestations/pension-survivants" },
+          { labelKey: "tabs.prestations.remboursement", href: "/prestations/remboursement-cotisations" },
+          { labelKey: "tabs.prestations.remariage", href: "/prestations/allocation-remariage" },
         ],
       },
       {
         icon: "/images/icon-accidents-travail.png",
-        title: "Risques professionnels",
+        titleKey: "tabs.prestations.risquesTitle",
         links: [
-          { label: "Accident du travail", href: "/prestations/accident-travail" },
-          { label: "Maladies professionnelles", href: "/prestations/maladies-professionnelles" },
+          { labelKey: "tabs.prestations.accidentTravail", href: "/prestations/accident-travail" },
+          { labelKey: "tabs.prestations.maladiesPro", href: "/prestations/maladies-professionnelles" },
         ],
       },
     ],
@@ -99,6 +100,7 @@ function findTabKeyForPath(pathname: string): string | undefined {
 }
 
 export function MetiersMegaMenu() {
+  const t = useTranslations("megaMenu.metiers");
   const pathname = usePathname();
   const activeRouteTabKey = useMemo(() => findTabKeyForPath(pathname), [pathname]);
   const isRouteActive = !!activeRouteTabKey;
@@ -107,7 +109,7 @@ export function MetiersMegaMenu() {
   const [activeTab, setActiveTab] = useState(activeRouteTabKey ?? TABS[0].key);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const tab = TABS.find((t) => t.key === activeTab) ?? TABS[0];
+  const tab = TABS.find((tabItem) => tabItem.key === activeTab) ?? TABS[0];
 
   function toggleMenu() {
     if (open) {
@@ -150,7 +152,7 @@ export function MetiersMegaMenu() {
             : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body"
         }
       >
-        Métiers
+        {t("trigger")}
         <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
@@ -158,20 +160,20 @@ export function MetiersMegaMenu() {
         <div className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2.5">
           <div className="relative flex w-[1250px] max-w-[calc(100vw-2.5rem)] items-start overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
             <div className="flex min-h-[260px] w-[238px] shrink-0 flex-col gap-3 self-stretch rounded-md bg-primary-800 px-4 py-7.5 shadow-[0px_1px_10px_0px_rgba(0,0,0,0.1)]">
-              {TABS.map((t) => (
+              {TABS.map((tabItem) => (
                 <button
-                  key={t.key}
+                  key={tabItem.key}
                   type="button"
-                  onMouseEnter={() => setActiveTab(t.key)}
-                  onClick={() => setActiveTab(t.key)}
+                  onMouseEnter={() => setActiveTab(tabItem.key)}
+                  onClick={() => setActiveTab(tabItem.key)}
                   className={
-                    t.key === activeTab
+                    tabItem.key === activeTab
                       ? "flex items-center justify-between rounded-lg bg-surface-light/20 p-2 text-left text-paragraph-xl font-semibold text-on-primary"
                       : "flex items-center justify-between rounded-lg p-2 text-left text-paragraph-xl font-semibold text-on-primary/90 transition-colors hover:bg-white/10"
                   }
                 >
-                  {t.label}
-                  {t.key === activeTab && <ChevronRight className="size-4 shrink-0" />}
+                  {t(tabItem.labelKey)}
+                  {tabItem.key === activeTab && <ChevronRight className="size-4 shrink-0" />}
                 </button>
               ))}
             </div>
@@ -188,13 +190,13 @@ export function MetiersMegaMenu() {
               {tab.columns.some((column) => column.links) ? (
                 <div className="relative flex items-stretch gap-[30px] p-[30px]">
                   {tab.columns.map((column, index) => (
-                    <Fragment key={column.title}>
+                    <Fragment key={column.titleKey}>
                       {index > 0 && <div className="w-px shrink-0 self-stretch bg-line" />}
                       <div className="flex shrink-0 flex-col gap-5">
                         <div className="flex items-center gap-4">
                           <IconChip src={column.icon} />
                           <p className="whitespace-pre-line text-paragraph-lg font-medium text-black">
-                            {column.title}
+                            {t(column.titleKey)}
                           </p>
                         </div>
 
@@ -207,7 +209,7 @@ export function MetiersMegaMenu() {
                                 onClick={() => setOpen(false)}
                                 className="text-paragraph-md font-medium text-body transition-colors hover:text-ink hover:underline"
                               >
-                                {link.label}
+                                {t(link.labelKey)}
                               </Link>
                             ))}
                           </div>
@@ -220,14 +222,14 @@ export function MetiersMegaMenu() {
                 <div className="relative flex items-center gap-[30px] p-[30px]">
                   {tab.columns.map((column) => (
                     <Link
-                      key={column.title}
+                      key={column.titleKey}
                       href={column.href ?? "#"}
                       onClick={() => setOpen(false)}
                       className="group flex items-center gap-4"
                     >
                       <IconChip src={column.icon} />
                       <p className="text-paragraph-lg font-semibold text-body transition-colors group-hover:text-ink group-hover:underline">
-                        {column.title}
+                        {t(column.titleKey)}
                       </p>
                     </Link>
                   ))}

@@ -9,16 +9,20 @@ import { MetierSection } from "@/components/metier/MetierSection";
 import { MetierLinksBox } from "@/components/metier/MetierLinksBox";
 import { getDeclarationPaiementCotisationsContent } from "@/lib/content/declaration-paiement-cotisations";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getDeclarationPaiementCotisationsContent();
+type Props = PageProps<"/[locale]/recouvrement/declaration-paiement-cotisations">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const content = await getDeclarationPaiementCotisationsContent(locale);
   return {
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
   };
 }
 
-export default async function DeclarationPaiementCotisationsPage() {
-  const content = await getDeclarationPaiementCotisationsContent();
+export default async function DeclarationPaiementCotisationsPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getDeclarationPaiementCotisationsContent(locale);
 
   return (
     <>

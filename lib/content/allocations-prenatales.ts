@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/routing";
 import type { MetierPageContent } from "@/types/metier-page";
 
 const allocationsPrenatalesContent: MetierPageContent = {
@@ -99,6 +100,10 @@ const allocationsPrenatalesContent: MetierPageContent = {
   },
 };
 
-export async function getAllocationsPrenatalesContent(): Promise<MetierPageContent> {
-  return allocationsPrenatalesContent;
+const contentByLocale: Record<Locale, MetierPageContent> = {
+  fr: allocationsPrenatalesContent,
+};
+
+export async function getAllocationsPrenatalesContent(locale: string): Promise<MetierPageContent> {
+  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
 }

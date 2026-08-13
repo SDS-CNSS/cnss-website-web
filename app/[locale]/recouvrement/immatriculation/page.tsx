@@ -9,16 +9,20 @@ import { MetierSection } from "@/components/metier/MetierSection";
 import { MetierLinksBox } from "@/components/metier/MetierLinksBox";
 import { getImmatriculationContent } from "@/lib/content/immatriculation";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getImmatriculationContent();
+type Props = PageProps<"/[locale]/recouvrement/immatriculation">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const content = await getImmatriculationContent(locale);
   return {
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
   };
 }
 
-export default async function ImmatriculationPage() {
-  const content = await getImmatriculationContent();
+export default async function ImmatriculationPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getImmatriculationContent(locale);
 
   return (
     <>

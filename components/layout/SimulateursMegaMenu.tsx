@@ -2,66 +2,67 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
 
 type SimulateurItem = {
   icon: string;
-  label: string;
+  labelKey: string;
   href: string;
 };
 
 type SimulateurTab = {
   key: string;
-  label: string;
+  labelKey: string;
   items: SimulateurItem[];
 };
 
 const TABS: SimulateurTab[] = [
   {
     key: "cotisations",
-    label: "Cotisations",
+    labelKey: "tabs.cotisations.label",
     items: [
       {
         icon: "/images/icon-charges-sociales-embauche.png",
-        label: "Charges sociales liées à l'embauche",
+        labelKey: "tabs.cotisations.chargesSociales",
         href: "/simulateurs/charges-sociales-embauche",
       },
       {
         icon: "/images/icon-majoration-retard.png",
-        label: "Majoration de retard",
+        labelKey: "tabs.cotisations.majorationRetard",
         href: "/simulateurs/majoration-retard",
       },
     ],
   },
   {
     key: "pension",
-    label: "Pension",
+    labelKey: "tabs.pension.label",
     items: [
       {
         icon: "/images/icon-pension-vieillesse.png",
-        label: "Pension et allocation de vieillesse",
+        labelKey: "tabs.pension.vieillesse",
         href: "/simulateurs/pension",
       },
       {
         icon: "/images/icon-pension-vieillesse-anticipee.png",
-        label: "Pension de vieillesse anticipée",
+        labelKey: "tabs.pension.vieillesseAnticipee",
         href: "/simulateurs/pension-vieillesse-anticipee",
       },
       {
         icon: "/images/icon-pension-survivants-conjoints.png",
-        label: "Pensions de survivants : cas des conjoints",
+        labelKey: "tabs.pension.survivantsConjoints",
         href: "/simulateurs/pension-survivants-conjoints",
       },
       {
         icon: "/images/icon-pension-survivants-enfants.png",
-        label: "Pensions de survivants : cas des enfants",
+        labelKey: "tabs.pension.survivantsEnfants",
         href: "/simulateurs/pension-survivants-enfants",
       },
       {
         icon: "/images/icon-allocation-survivants.png",
-        label: "Allocation de survivants",
+        labelKey: "tabs.pension.allocationSurvivants",
         href: "/simulateurs/allocation-survivants",
       },
     ],
@@ -77,6 +78,7 @@ function findTabKeyForPath(pathname: string): string | undefined {
 }
 
 export function SimulateursMegaMenu() {
+  const t = useTranslations("megaMenu.simulateurs");
   const pathname = usePathname();
   const activeRouteTabKey = useMemo(() => findTabKeyForPath(pathname), [pathname]);
   const isRouteActive = !!activeRouteTabKey;
@@ -85,7 +87,7 @@ export function SimulateursMegaMenu() {
   const [activeTab, setActiveTab] = useState(activeRouteTabKey ?? TABS[0].key);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const tab = TABS.find((t) => t.key === activeTab) ?? TABS[0];
+  const tab = TABS.find((tabItem) => tabItem.key === activeTab) ?? TABS[0];
 
   function toggleMenu() {
     if (open) {
@@ -128,7 +130,7 @@ export function SimulateursMegaMenu() {
             : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body"
         }
       >
-        Simulateurs
+        {t("trigger")}
         <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
@@ -136,20 +138,20 @@ export function SimulateursMegaMenu() {
         <div className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2.5">
           <div className="relative flex w-[1250px] max-w-[calc(100vw-2.5rem)] items-stretch gap-0 overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
             <div className="flex w-[238px] shrink-0 flex-col gap-3 rounded-md bg-primary-800 px-4 py-7.5 shadow-[0px_1px_10px_0px_rgba(0,0,0,0.1)]">
-              {TABS.map((t) => (
+              {TABS.map((tabItem) => (
                 <button
-                  key={t.key}
+                  key={tabItem.key}
                   type="button"
-                  onMouseEnter={() => setActiveTab(t.key)}
-                  onClick={() => setActiveTab(t.key)}
+                  onMouseEnter={() => setActiveTab(tabItem.key)}
+                  onClick={() => setActiveTab(tabItem.key)}
                   className={
-                    t.key === activeTab
+                    tabItem.key === activeTab
                       ? "flex items-center justify-between rounded-lg bg-surface-light/20 p-2 text-left text-paragraph-xl font-semibold text-on-primary"
                       : "flex items-center justify-between rounded-lg p-2 text-left text-paragraph-xl font-semibold text-on-primary/90 transition-colors hover:bg-white/10"
                   }
                 >
-                  {t.label}
-                  {t.key === activeTab && <ChevronRight className="size-5 shrink-0" />}
+                  {t(tabItem.labelKey)}
+                  {tabItem.key === activeTab && <ChevronRight className="size-5 shrink-0" />}
                 </button>
               ))}
             </div>
@@ -174,7 +176,7 @@ export function SimulateursMegaMenu() {
                     <Image src={item.icon} alt="" width={32} height={32} />
                   </div>
                   <p className="text-paragraph-lg font-semibold text-body transition-colors group-hover:text-ink group-hover:underline">
-                    {item.label}
+                    {t(item.labelKey)}
                   </p>
                 </Link>
               ))}

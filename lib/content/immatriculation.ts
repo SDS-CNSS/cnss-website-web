@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/routing";
 import type { MetierPageContent } from "@/types/metier-page";
 
 const immatriculationContent: MetierPageContent = {
@@ -238,6 +239,10 @@ const immatriculationContent: MetierPageContent = {
   },
 };
 
-export async function getImmatriculationContent(): Promise<MetierPageContent> {
-  return immatriculationContent;
+const contentByLocale: Record<Locale, MetierPageContent> = {
+  fr: immatriculationContent,
+};
+
+export async function getImmatriculationContent(locale: string): Promise<MetierPageContent> {
+  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
 }

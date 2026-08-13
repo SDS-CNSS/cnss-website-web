@@ -9,16 +9,20 @@ import { MetierSection } from "@/components/metier/MetierSection";
 import { MetierLinksBox } from "@/components/metier/MetierLinksBox";
 import { getAllocationsPrenatalesContent } from "@/lib/content/allocations-prenatales";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getAllocationsPrenatalesContent();
+type Props = PageProps<"/[locale]/prestations/allocations-prenatales">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const content = await getAllocationsPrenatalesContent(locale);
   return {
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
   };
 }
 
-export default async function AllocationsPrenatalesPage() {
-  const content = await getAllocationsPrenatalesContent();
+export default async function AllocationsPrenatalesPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getAllocationsPrenatalesContent(locale);
 
   return (
     <>

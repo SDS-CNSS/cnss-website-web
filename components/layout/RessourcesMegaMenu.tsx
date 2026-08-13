@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { ChevronDown, File, FileImage } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
 
 const ITEMS = [
-  { icon: File, label: "Bibliothèque", href: "/bibliotheque" },
-  { icon: FileImage, label: "Médiathèque", href: "/mediatheque" },
+  { icon: File, labelKey: "bibliotheque", href: "/bibliotheque" },
+  { icon: FileImage, labelKey: "mediatheque", href: "/mediatheque" },
 ] as const;
 
 function isPathActive(pathname: string, href: string) {
@@ -16,6 +17,7 @@ function isPathActive(pathname: string, href: string) {
 }
 
 export function RessourcesMegaMenu() {
+  const t = useTranslations("megaMenu.ressources");
   const pathname = usePathname();
   const isRouteActive = useMemo(() => ITEMS.some((item) => isPathActive(pathname, item.href)), [pathname]);
 
@@ -54,7 +56,7 @@ export function RessourcesMegaMenu() {
             : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body"
         }
       >
-        Ressources
+        {t("trigger")}
         <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
@@ -80,7 +82,7 @@ export function RessourcesMegaMenu() {
                   <item.icon className="size-5 text-ink" />
                 </div>
                 <p className="text-paragraph-lg font-semibold whitespace-nowrap text-body transition-colors group-hover:text-ink group-hover:underline">
-                  {item.label}
+                  {t(item.labelKey)}
                 </p>
               </Link>
             ))}

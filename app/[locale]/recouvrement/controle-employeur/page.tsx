@@ -9,16 +9,20 @@ import { MetierSection } from "@/components/metier/MetierSection";
 import { MetierLinksBox } from "@/components/metier/MetierLinksBox";
 import { getControleEmployeurContent } from "@/lib/content/controle-employeur";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getControleEmployeurContent();
+type Props = PageProps<"/[locale]/recouvrement/controle-employeur">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const content = await getControleEmployeurContent(locale);
   return {
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
   };
 }
 
-export default async function ControleEmployeurPage() {
-  const content = await getControleEmployeurContent();
+export default async function ControleEmployeurPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getControleEmployeurContent(locale);
 
   return (
     <>

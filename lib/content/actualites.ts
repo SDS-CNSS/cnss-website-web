@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/routing";
 import type { NewsCardProps } from "@/components/ui/NewsCard";
 
 export interface ActualitesContent {
@@ -64,11 +65,15 @@ const articles: NewsCardProps[] = [
   },
 ];
 
-export async function getActualitesContent(): Promise<ActualitesContent> {
-  return {
+const contentByLocale: Record<Locale, ActualitesContent> = {
+  fr: {
     articles,
     totalCount: 120,
     totalPages: 8,
     currentPage: 1,
-  };
+  },
+};
+
+export async function getActualitesContent(locale: string): Promise<ActualitesContent> {
+  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
 }

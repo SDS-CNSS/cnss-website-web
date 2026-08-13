@@ -1,3 +1,5 @@
+import type { Locale } from "@/i18n/routing";
+
 export interface DocumentItem {
   title: string;
   tags: string[];
@@ -65,11 +67,15 @@ const documents: DocumentItem[] = [
   },
 ];
 
-export async function getBibliothequeContent(): Promise<BibliothequeContent> {
-  return {
+const contentByLocale: Record<Locale, BibliothequeContent> = {
+  fr: {
     documents,
     totalCount: 45,
     totalPages: 4,
     currentPage: 1,
-  };
+  },
+};
+
+export async function getBibliothequeContent(locale: string): Promise<BibliothequeContent> {
+  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
 }

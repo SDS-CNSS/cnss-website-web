@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/routing";
 import type { MetierPageContent } from "@/types/metier-page";
 
 const declarationPaiementCotisationsContent: MetierPageContent = {
@@ -200,6 +201,12 @@ const declarationPaiementCotisationsContent: MetierPageContent = {
   },
 };
 
-export async function getDeclarationPaiementCotisationsContent(): Promise<MetierPageContent> {
-  return declarationPaiementCotisationsContent;
+const contentByLocale: Record<Locale, MetierPageContent> = {
+  fr: declarationPaiementCotisationsContent,
+};
+
+export async function getDeclarationPaiementCotisationsContent(
+  locale: string,
+): Promise<MetierPageContent> {
+  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
 }

@@ -7,16 +7,20 @@ import { HistoireTimeline } from "@/components/sections/HistoireTimeline";
 import { ImpactCta } from "@/components/sections/ImpactCta";
 import { getAProposContent } from "@/lib/content/a-propos";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getAProposContent();
+type Props = PageProps<"/[locale]/a-propos">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const content = await getAProposContent(locale);
   return {
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
   };
 }
 
-export default async function AProposPage() {
-  const content = await getAProposContent();
+export default async function AProposPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getAProposContent(locale);
 
   return (
     <>

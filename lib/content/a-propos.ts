@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/routing";
 import type { AProposContent } from "@/types/a-propos";
 
 const aProposContent: AProposContent = {
@@ -114,6 +115,10 @@ const aProposContent: AProposContent = {
   },
 };
 
-export async function getAProposContent(): Promise<AProposContent> {
-  return aProposContent;
+const contentByLocale: Record<Locale, AProposContent> = {
+  fr: aProposContent,
+};
+
+export async function getAProposContent(locale: string): Promise<AProposContent> {
+  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
 }

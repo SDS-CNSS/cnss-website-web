@@ -7,6 +7,8 @@ import { ActualitesGrid } from "@/components/actualites/ActualitesGrid";
 import { Pagination } from "@/components/ui/Pagination";
 import { getActualitesContent } from "@/lib/content/actualites";
 
+type Props = PageProps<"/[locale]/actualites">;
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Actualités | CNSS Bénin",
@@ -15,8 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function ActualitesPage() {
-  const content = await getActualitesContent();
+export default async function ActualitesPage({ params }: Props) {
+  const { locale } = await params;
+  const content = await getActualitesContent(locale);
 
   return (
     <>

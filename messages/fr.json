@@ -3,6 +3,93 @@
     "accueil": "Accueil",
     "aPropos": "À propos",
     "actualites": "Actualités",
-    "contact": "Contactez-nous"
+    "contact": "Contactez-nous",
+    "search": "Rechercher sur le site"
+  },
+  "footer": {
+    "description": "La CNSS, c'est l'assurance d'une meilleure protection pour la vie. Nous sommes au service de la prévention des risques professionnels.",
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Recevez périodiquement les actualités de la CNSS directement dans votre boîte mail.",
+      "firstNamePlaceholder": "Prénom",
+      "emailPlaceholder": "Adresse mail",
+      "submit": "S'abonner"
+    },
+    "quickLinksTitle": "Liens Utiles",
+    "quickLinks": {
+      "apiex": "Agence de Promotion des Investissements et des Exportations (APIEx)",
+      "dgi": "Direction Générale des Impôts (DGI)",
+      "servicePublic": "Portail National des Services publics",
+      "asin": "Agence des Systèmes d'Information et du Numérique (ASIN)",
+      "anip": "Agence Nationale d'Identification des Personnes (ANIP)"
+    },
+    "contactsTitle": "Contacts",
+    "siegeSocial": "Siège social",
+    "siegeSocialAddress": "390, Avenue Jean-Paul II",
+    "boitePostale": "Boîte Postale",
+    "boitePostaleValue": "01 BP 374 Cadjèhoun - Cotonou",
+    "telephone": "Téléphone",
+    "telephoneValue": "(+229) 01 90 19 00 00",
+    "email": "Email",
+    "emailValue": "info@cnss.bj",
+    "copyright": "© Copyright 2026 - CNSS Bénin",
+    "legal": {
+      "mentions": "Mentions légales",
+      "confidentialite": "Politiques de confidentialité",
+      "cgu": "CGU",
+      "cookies": "Gestion des cookies"
+    }
+  },
+  "megaMenu": {
+    "metiers": {
+      "trigger": "Métiers",
+      "tabs": {
+        "recouvrement": {
+          "label": "Recouvrement",
+          "immatriculation": "Immatriculation",
+          "declaration": "Déclaration et paiement des cotisations",
+          "controle": "Contrôle employeur"
+        },
+        "prestations": {
+          "label": "Prestations",
+          "familialesTitle": "Prestations familiales et\nde maternité",
+          "allocationsFamiliales": "Allocations familiales",
+          "allocationsPrenatales": "Allocations prénatales",
+          "congeMaternite": "Indemnités de congé de maternité",
+          "actionSanitaire": "Action sanitaire et sociale",
+          "vieillesseTitle": "Prestations de vieillesse",
+          "pensions": "Pensions et allocations de vieillesse",
+          "pensionSurvivants": "Pensions et allocations de survivants",
+          "remboursement": "Remboursement des cotisations",
+          "remariage": "Allocation de remariage",
+          "risquesTitle": "Risques professionnels",
+          "accidentTravail": "Accident du travail",
+          "maladiesPro": "Maladies professionnelles"
+        }
+      }
+    },
+    "simulateurs": {
+      "trigger": "Simulateurs",
+      "tabs": {
+        "cotisations": {
+          "label": "Cotisations",
+          "chargesSociales": "Charges sociales liées à l'embauche",
+          "majorationRetard": "Majoration de retard"
+        },
+        "pension": {
+          "label": "Pension",
+          "vieillesse": "Pension et allocation de vieillesse",
+          "vieillesseAnticipee": "Pension de vieillesse anticipée",
+          "survivantsConjoints": "Pensions de survivants : cas des conjoints",
+          "survivantsEnfants": "Pensions de survivants : cas des enfants",
+          "allocationSurvivants": "Allocation de survivants"
+        }
+      }
+    },
+    "ressources": {
+      "trigger": "Ressources",
+      "bibliotheque": "Bibliothèque",
+      "mediatheque": "Médiathèque"
+    }
   }
 }

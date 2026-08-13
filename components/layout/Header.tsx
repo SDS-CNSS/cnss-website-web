@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
@@ -7,13 +8,9 @@ import { SimulateursMegaMenu } from "@/components/layout/SimulateursMegaMenu";
 import { RessourcesMegaMenu } from "@/components/layout/RessourcesMegaMenu";
 import { MegaMenuProvider } from "@/components/layout/MegaMenuContext";
 
-const NAV_ITEMS = [
-  { label: "Accueil", href: "/" },
-  { label: "À propos", href: "/a-propos" },
-  { label: "Actualités", href: "/actualites" },
-] as const;
-
 export function Header() {
+  const t = useTranslations("nav");
+
   return (
     <header className="flex w-full flex-col items-start">
       <div className="flex w-full items-center justify-between bg-surface px-20 py-4">
@@ -21,7 +18,7 @@ export function Header() {
         <label className="flex h-10 w-[300px] items-center gap-3 rounded-md border border-line bg-surface px-3 py-2">
           <input
             type="search"
-            placeholder="Rechercher sur le site"
+            placeholder={t("search")}
             className="w-full flex-1 text-base text-ink placeholder:text-muted focus:outline-none"
           />
           <Search className="size-4 text-muted" />
@@ -29,16 +26,16 @@ export function Header() {
       </div>
       <div className="relative flex w-full items-center justify-between bg-subtle px-20 py-4">
         <nav className="flex items-center gap-8">
-          <NavLink {...NAV_ITEMS[0]} />
-          <NavLink {...NAV_ITEMS[1]} />
+          <NavLink label={t("accueil")} href="/" />
+          <NavLink label={t("aPropos")} href="/a-propos" />
           <MegaMenuProvider>
             <MetiersMegaMenu />
             <SimulateursMegaMenu />
-            <NavLink {...NAV_ITEMS[2]} />
+            <NavLink label={t("actualites")} href="/actualites" />
             <RessourcesMegaMenu />
           </MegaMenuProvider>
         </nav>
-        <Button href="/contact">Contactez-nous</Button>
+        <Button href="/contact">{t("contact")}</Button>
       </div>
     </header>
   );
