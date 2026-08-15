@@ -24,15 +24,20 @@ function findTabKeyForPath(pathname: string): string | undefined {
   return TABS.find((t) =>
     t.columns.some((column) => {
       if (column.href && isPathActive(pathname, column.href)) return true;
-      return column.links?.some((link) => isPathActive(pathname, link.href)) ?? false;
-    })
+      return (
+        column.links?.some((link) => isPathActive(pathname, link.href)) ?? false
+      );
+    }),
   )?.key;
 }
 
 export function MetiersMegaMenu() {
   const t = useTranslations("megaMenu.metiers");
   const pathname = usePathname();
-  const activeRouteTabKey = useMemo(() => findTabKeyForPath(pathname), [pathname]);
+  const activeRouteTabKey = useMemo(
+    () => findTabKeyForPath(pathname),
+    [pathname],
+  );
   const isRouteActive = !!activeRouteTabKey;
 
   const { open, setOpen } = useMegaMenu("metiers");
@@ -54,7 +59,10 @@ export function MetiersMegaMenu() {
     if (!open) return;
 
     function handlePointerDown(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     }
@@ -78,18 +86,20 @@ export function MetiersMegaMenu() {
         aria-current={isRouteActive ? "page" : undefined}
         className={
           open || isRouteActive
-            ? "flex items-center gap-1.5 border-b border-primary-hover pb-[3px] text-base font-medium text-primary-hover"
-            : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body"
+            ? "flex items-center gap-1.5 border-b border-primary-hover pb-[0.1875rem] text-base font-medium text-primary-hover"
+            : "flex items-center gap-1.5 border-b border-transparent pb-[0.1875rem] text-base font-medium text-body"
         }
       >
         {t("trigger")}
-        <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       {open && (
         <div className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2.5">
-          <div className="relative flex w-[1250px] max-w-[calc(100vw-2.5rem)] items-start overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
-            <div className="flex min-h-[260px] w-[238px] shrink-0 flex-col gap-3 self-stretch rounded-md bg-primary-800 px-4 py-7.5 shadow-[0px_1px_10px_0px_rgba(0,0,0,0.1)]">
+          <div className="relative flex w-[78.125rem] max-w-[calc(100vw-2.5rem)] items-start overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
+            <div className="flex min-h-[16.25rem] w-[14.875rem] shrink-0 flex-col gap-3 self-stretch rounded-md bg-primary-800 px-4 py-7.5 shadow-[0px_1px_10px_0px_rgba(0,0,0,0.1)]">
               {TABS.map((tabItem) => (
                 <button
                   key={tabItem.key}
@@ -103,7 +113,9 @@ export function MetiersMegaMenu() {
                   }
                 >
                   {t(tabItem.labelKey)}
-                  {tabItem.key === activeTab && <ChevronRight className="size-4 shrink-0" />}
+                  {tabItem.key === activeTab && (
+                    <ChevronRight className="size-4 shrink-0" />
+                  )}
                 </button>
               ))}
             </div>
@@ -114,14 +126,16 @@ export function MetiersMegaMenu() {
                 alt=""
                 width={554}
                 height={539}
-                className="pointer-events-none absolute top-[-184px] left-[802px] opacity-5"
+                className="pointer-events-none absolute top-[-184px] left-[50.125rem] opacity-5"
               />
 
               {tab.columns.some((column) => column.links) ? (
-                <div className="relative flex items-stretch gap-[30px] p-[30px]">
+                <div className="relative flex items-stretch gap-[1.875rem] p-[1.875rem]">
                   {tab.columns.map((column, index) => (
                     <Fragment key={column.titleKey}>
-                      {index > 0 && <div className="w-px shrink-0 self-stretch bg-line" />}
+                      {index > 0 && (
+                        <div className="w-px shrink-0 self-stretch bg-line" />
+                      )}
                       <div className="flex shrink-0 flex-col gap-5">
                         <div className="flex items-center gap-4">
                           <IconChip src={column.icon} />
@@ -149,7 +163,7 @@ export function MetiersMegaMenu() {
                   ))}
                 </div>
               ) : (
-                <div className="relative flex items-center gap-[30px] p-[30px]">
+                <div className="relative flex items-center gap-[1.875rem] p-[1.875rem]">
                   {tab.columns.map((column) => (
                     <Link
                       key={column.titleKey}

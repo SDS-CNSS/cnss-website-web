@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
 
 type MegaMenuContextValue = {
   openKey: string | null;
@@ -11,7 +17,11 @@ const MegaMenuContext = createContext<MegaMenuContextValue | null>(null);
 
 export function MegaMenuProvider({ children }: { children: ReactNode }) {
   const [openKey, setOpenKey] = useState<string | null>(null);
-  return <MegaMenuContext.Provider value={{ openKey, setOpenKey }}>{children}</MegaMenuContext.Provider>;
+  return (
+    <MegaMenuContext.Provider value={{ openKey, setOpenKey }}>
+      {children}
+    </MegaMenuContext.Provider>
+  );
 }
 
 export function useMegaMenu(key: string) {
@@ -21,6 +31,9 @@ export function useMegaMenu(key: string) {
   }
   const { setOpenKey } = context;
   const open = context.openKey === key;
-  const setOpen = useCallback((value: boolean) => setOpenKey(value ? key : null), [key, setOpenKey]);
+  const setOpen = useCallback(
+    (value: boolean) => setOpenKey(value ? key : null),
+    [key, setOpenKey],
+  );
   return { open, setOpen };
 }

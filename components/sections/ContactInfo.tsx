@@ -19,7 +19,8 @@ const CARDS = [
 
 export function ContactInfo({ title, locations }: ContactInfoProps) {
   const [selectedId, setSelectedId] = useState(locations[0]?.id);
-  const location = locations.find((loc) => loc.id === selectedId) ?? locations[0];
+  const location =
+    locations.find((loc) => loc.id === selectedId) ?? locations[0];
 
   if (!location) return null;
 
@@ -32,7 +33,9 @@ export function ContactInfo({ title, locations }: ContactInfoProps) {
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-6">
-      <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">{title}</h2>
+      <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">
+        {title}
+      </h2>
 
       <Select
         label="Direction Générale"
@@ -55,7 +58,9 @@ export function ContactInfo({ title, locations }: ContactInfoProps) {
               <Icon className="size-5 text-primary-800" />
             </div>
             <div className="flex flex-col gap-0.5">
-              <p className="font-heading text-lg font-bold text-primary-800">{cardLabels[key]}</p>
+              <p className="font-heading text-lg font-bold text-primary-800">
+                {cardLabels[key]}
+              </p>
               <p className="text-base text-body">{location[key]}</p>
             </div>
           </div>

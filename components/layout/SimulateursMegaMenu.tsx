@@ -13,13 +13,18 @@ function isPathActive(pathname: string, href: string) {
 }
 
 function findTabKeyForPath(pathname: string): string | undefined {
-  return TABS.find((t) => t.items.some((item) => isPathActive(pathname, item.href)))?.key;
+  return TABS.find((t) =>
+    t.items.some((item) => isPathActive(pathname, item.href)),
+  )?.key;
 }
 
 export function SimulateursMegaMenu() {
   const t = useTranslations("megaMenu.simulateurs");
   const pathname = usePathname();
-  const activeRouteTabKey = useMemo(() => findTabKeyForPath(pathname), [pathname]);
+  const activeRouteTabKey = useMemo(
+    () => findTabKeyForPath(pathname),
+    [pathname],
+  );
   const isRouteActive = !!activeRouteTabKey;
 
   const { open, setOpen } = useMegaMenu("simulateurs");
@@ -41,7 +46,10 @@ export function SimulateursMegaMenu() {
     if (!open) return;
 
     function handlePointerDown(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     }
@@ -65,18 +73,20 @@ export function SimulateursMegaMenu() {
         aria-current={isRouteActive ? "page" : undefined}
         className={
           open || isRouteActive
-            ? "flex items-center gap-1.5 border-b border-primary-hover pb-[3px] text-base font-medium text-primary-hover"
-            : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body"
+            ? "flex items-center gap-1.5 border-b border-primary-hover pb-[0.1875rem] text-base font-medium text-primary-hover"
+            : "flex items-center gap-1.5 border-b border-transparent pb-[0.1875rem] text-base font-medium text-body"
         }
       >
         {t("trigger")}
-        <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       {open && (
         <div className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2.5">
-          <div className="relative flex w-[1250px] max-w-[calc(100vw-2.5rem)] items-stretch gap-0 overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
-            <div className="flex w-[238px] shrink-0 flex-col gap-3 rounded-md bg-primary-800 px-4 py-7.5 shadow-[0px_1px_10px_0px_rgba(0,0,0,0.1)]">
+          <div className="relative flex w-[78.125rem] max-w-[calc(100vw-2.5rem)] items-stretch gap-0 overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
+            <div className="flex w-[14.875rem] shrink-0 flex-col gap-3 rounded-md bg-primary-800 px-4 py-7.5 shadow-[0px_1px_10px_0px_rgba(0,0,0,0.1)]">
               {TABS.map((tabItem) => (
                 <button
                   key={tabItem.key}
@@ -90,18 +100,20 @@ export function SimulateursMegaMenu() {
                   }
                 >
                   {t(tabItem.labelKey)}
-                  {tabItem.key === activeTab && <ChevronRight className="size-5 shrink-0" />}
+                  {tabItem.key === activeTab && (
+                    <ChevronRight className="size-5 shrink-0" />
+                  )}
                 </button>
               ))}
             </div>
 
-            <div className="relative grid min-h-[240px] flex-1 auto-rows-min grid-cols-2 content-start gap-6 p-7.5">
+            <div className="relative grid min-h-[15rem] flex-1 auto-rows-min grid-cols-2 content-start gap-6 p-7.5">
               <Image
                 src="/images/watermark-logo.png"
                 alt=""
                 width={554}
                 height={539}
-                className="pointer-events-none absolute top-[-184px] left-[802px] opacity-5"
+                className="pointer-events-none absolute top-[-184px] left-[50.125rem] opacity-5"
               />
 
               {tab.items.map((item) => (

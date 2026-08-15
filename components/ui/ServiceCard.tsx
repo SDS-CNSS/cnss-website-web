@@ -8,7 +8,12 @@ type ServiceCardProps = {
   description: string;
 };
 
-export function ServiceCard({ href, icon, title, description }: ServiceCardProps) {
+export function ServiceCard({
+  href,
+  icon,
+  title,
+  description,
+}: ServiceCardProps) {
   return (
     <Link
       href={href}

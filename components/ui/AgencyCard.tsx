@@ -20,7 +20,7 @@ export function AgencyCard({
 }: AgencyCardProps) {
   return (
     <div className="flex w-full flex-col items-start overflow-hidden rounded-2xl border border-line bg-surface shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] transition-[border-color,box-shadow] hover:border-primary hover:shadow-[0px_10px_10px_0px_rgba(0,0,0,0.03)]">
-      <div className="relative h-[250px] w-full bg-[#d9dade]">
+      <div className="relative h-[15.625rem] w-full bg-[#d9dade]">
         <Image src={image} alt={city} fill className="object-cover" />
       </div>
       <div className="flex w-full flex-col items-start gap-2 p-6">
@@ -31,7 +31,7 @@ export function AgencyCard({
           </h3>
         </div>
         <p className="w-full text-sm font-bold text-ink-soft">{region}</p>
-        <div className="flex w-full flex-col items-start gap-[7.5px] pt-2">
+        <div className="flex w-full flex-col items-start gap-[0.4688rem] pt-2">
           <div className="flex w-full items-center gap-2">
             <Navigation className="size-4 shrink-0 text-ink-soft" />
             <p className="text-base text-ink-soft">{address}</p>

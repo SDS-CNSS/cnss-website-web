@@ -15,7 +15,10 @@ function isPathActive(pathname: string, href: string) {
 export function RessourcesMegaMenu() {
   const t = useTranslations("megaMenu.ressources");
   const pathname = usePathname();
-  const isRouteActive = useMemo(() => ITEMS.some((item) => isPathActive(pathname, item.href)), [pathname]);
+  const isRouteActive = useMemo(
+    () => ITEMS.some((item) => isPathActive(pathname, item.href)),
+    [pathname],
+  );
 
   const { open, setOpen } = useMegaMenu("ressources");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,7 +27,10 @@ export function RessourcesMegaMenu() {
     if (!open) return;
 
     function handlePointerDown(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     }
@@ -48,17 +54,19 @@ export function RessourcesMegaMenu() {
         aria-current={isRouteActive ? "page" : undefined}
         className={
           open || isRouteActive
-            ? "flex items-center gap-1.5 border-b border-primary-hover pb-[3px] text-base font-medium text-primary-hover"
-            : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body"
+            ? "flex items-center gap-1.5 border-b border-primary-hover pb-[0.1875rem] text-base font-medium text-primary-hover"
+            : "flex items-center gap-1.5 border-b border-transparent pb-[0.1875rem] text-base font-medium text-body"
         }
       >
         {t("trigger")}
-        <ChevronDown className={`size-4 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       {open && (
         <div className="absolute top-full left-1/2 z-50 -translate-x-1/2 pt-2.5">
-          <div className="relative flex w-[1250px] max-w-[calc(100vw-2.5rem)] items-center gap-8 overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
+          <div className="relative flex w-[78.125rem] max-w-[calc(100vw-2.5rem)] items-center gap-8 overflow-hidden rounded-2xl bg-surface p-5 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.05)]">
             <Image
               src="/images/watermark-logo.png"
               alt=""

@@ -13,7 +13,12 @@ type ActualitesGridProps = {
   totalPages: number;
 };
 
-export function ActualitesGrid({ articles, totalCount, currentPage, totalPages }: ActualitesGridProps) {
+export function ActualitesGrid({
+  articles,
+  totalCount,
+  currentPage,
+  totalPages,
+}: ActualitesGridProps) {
   const [view, setView] = useState<"grid" | "list">("grid");
 
   return (
@@ -28,7 +33,9 @@ export function ActualitesGrid({ articles, totalCount, currentPage, totalPages }
               aria-pressed={view === "grid"}
               onClick={() => setView("grid")}
               className={`flex size-9 items-center justify-center rounded-md transition-colors ${
-                view === "grid" ? "bg-surface-light-2 text-ink" : "text-muted hover:text-ink"
+                view === "grid"
+                  ? "bg-surface-light-2 text-ink"
+                  : "text-muted hover:text-ink"
               }`}
             >
               <LayoutGrid className="size-4" />
@@ -39,7 +46,9 @@ export function ActualitesGrid({ articles, totalCount, currentPage, totalPages }
               aria-pressed={view === "list"}
               onClick={() => setView("list")}
               className={`flex size-9 items-center justify-center rounded-md transition-colors ${
-                view === "list" ? "bg-surface-light-2 text-ink" : "text-muted hover:text-ink"
+                view === "list"
+                  ? "bg-surface-light-2 text-ink"
+                  : "text-muted hover:text-ink"
               }`}
             >
               <List className="size-4" />

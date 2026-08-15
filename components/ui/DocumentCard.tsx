@@ -13,12 +13,21 @@ type DocumentCardProps = {
   downloadHref: string;
 };
 
-export function DocumentCard({ title, tags, fileType, fileSize, viewHref, downloadHref }: DocumentCardProps) {
+export function DocumentCard({
+  title,
+  tags,
+  fileType,
+  fileSize,
+  viewHref,
+  downloadHref,
+}: DocumentCardProps) {
   return (
     <div className="flex h-full flex-col gap-4 rounded-2xl border-2 border-primary bg-surface p-6 shadow-[0px_0px_4px_0px_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0px_10px_20px_0px_rgba(0,0,0,0.08)]">
       <div className="flex items-start gap-3">
         <File className="size-8 shrink-0 text-primary" />
-        <h3 className="line-clamp-2 font-heading text-h6 font-bold text-primary">{title}</h3>
+        <h3 className="line-clamp-2 font-heading text-h6 font-bold text-primary">
+          {title}
+        </h3>
       </div>
       <div className="flex flex-wrap gap-2">
         {tags.map((tag, index) => (

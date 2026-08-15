@@ -40,7 +40,7 @@ const aProposContent: AProposContent = {
   },
   gouvernance: {
     title: "Notre gouvernance",
-    cta: { label: "En savoir plus", href: "#" },
+    cta: { label: "En savoir plus", href: "/organes-de-gouvernance" },
     content: [
       {
         type: "paragraph",

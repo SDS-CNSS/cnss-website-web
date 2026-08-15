@@ -6,7 +6,10 @@ type ListFiltersProps = {
   filters: { label: string; options: string[] }[];
 };
 
-export function ListFilters({ searchPlaceholder = "Rechercher par mot-clé", filters }: ListFiltersProps) {
+export function ListFilters({
+  searchPlaceholder = "Rechercher par mot-clé",
+  filters,
+}: ListFiltersProps) {
   return (
     <section className="flex w-full flex-col gap-4">
       <h2 className="text-h6 font-bold text-ink">Filtrer par</h2>
@@ -20,7 +23,12 @@ export function ListFilters({ searchPlaceholder = "Rechercher par mot-clé", fil
           />
         </label>
         {filters.map((filter) => (
-          <Select key={filter.label} label={filter.label} options={filter.options} className="md:w-[200px]" />
+          <Select
+            key={filter.label}
+            label={filter.label}
+            options={filter.options}
+            className="md:w-[12.5rem]"
+          />
         ))}
         <button
           type="submit"

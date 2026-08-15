@@ -4,11 +4,11 @@ import type { MetierPageContent } from "@/types/metier-page";
 const allocationsPrenatalesContent: MetierPageContent = {
   id: "allocations-prenatales",
   slug: "allocations-prenatales",
-  updatedAt: "2026-08-13",
+  updatedAt: "2026-08-14",
   seo: {
     metaTitle: "Allocations prénatales | CNSS Bénin",
     metaDescription:
-      "Conditions, pièces à fournir et droits liés aux allocations prénatales versées par la CNSS aux travailleuses salariées du Bénin.",
+      "Conditions, pièces à fournir et montant des allocations prénatales versées par la CNSS aux femmes salariées enceintes du Bénin.",
   },
   banner: {
     title: "Allocations prénatales",
@@ -19,7 +19,7 @@ const allocationsPrenatalesContent: MetierPageContent = {
     alt: "Une femme enceinte en consultation avec une sage-femme",
   },
   sidebarNav: [
-    { id: "definition", label: "Qu'est-ce que l'allocations prénatales ?" },
+    { id: "definition", label: "Qu'est-ce que les allocations prénatales ?" },
     { id: "conditions", label: "Quelles sont les conditions à remplir pour en bénéficier ?" },
     { id: "pieces-a-fournir", label: "Quelles pièces faut-il fournir ?" },
     { id: "droits", label: "À quoi avez-vous droit ?" },
@@ -32,14 +32,14 @@ const allocationsPrenatalesContent: MetierPageContent = {
     {
       id: "definition",
       number: "1",
-      title: "Qu'est-ce que l'allocations prénatales ?",
+      title: "Qu'est-ce que les allocations prénatales ?",
       variant: "tinted",
       subsections: [
         {
           blocks: [
             {
               type: "paragraph",
-              text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+              text: "Les allocations prénatales sont une prestation familiale destinée à assurer la surveillance médicale de la grossesse, en contrepartie de la réalisation des trois examens prénataux obligatoires.",
             },
           ],
         },
@@ -54,8 +54,11 @@ const allocationsPrenatalesContent: MetierPageContent = {
         {
           blocks: [
             {
-              type: "paragraph",
-              text: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
+              type: "list",
+              items: [
+                "Être femme salariée ou conjointe d'un travailleur salarié, en état de grossesse",
+                "Subir les trois (03) examens médicaux prénataux obligatoires : le 1er avant la fin du 3ème mois de grossesse, le 2ème au cours du 6ème mois, le 3ème au cours du 8ème mois",
+              ],
             },
           ],
         },
@@ -70,8 +73,11 @@ const allocationsPrenatalesContent: MetierPageContent = {
         {
           blocks: [
             {
-              type: "paragraph",
-              text: "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
+              type: "list",
+              items: [
+                "Les volets des différents examens prénataux",
+                "Les certificats médicaux de grossesse des 3ème, 6ème et 8ème mois, à déposer à compter des dates des visites",
+              ],
             },
           ],
         },
@@ -87,7 +93,25 @@ const allocationsPrenatalesContent: MetierPageContent = {
           blocks: [
             {
               type: "paragraph",
-              text: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.",
+              text: "Le montant total des allocations prénatales est de 4 500 francs CFA, versé en trois fractions correspondant aux trois examens médicaux :",
+            },
+            {
+              type: "list",
+              items: [
+                "1ère fraction, due après le 1er examen (avant la fin du 3ème mois) : 1 000 F",
+                "2ème fraction, due après le 2ème examen (au cours du 6ème mois) : 2 000 F",
+                "3ème fraction, due après le 3ème examen (au cours du 8ème mois) : 1 500 F",
+              ],
+            },
+          ],
+          alerts: [
+            {
+              description: "Tout examen non subi fait perdre le droit à la fraction correspondante.",
+              variant: "warning",
+            },
+            {
+              description: "Le bénéficiaire a la possibilité de cumuler le paiement des trois fractions.",
+              variant: "info",
             },
           ],
         },

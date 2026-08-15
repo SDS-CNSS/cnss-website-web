@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ServiceCard } from "@/components/ui/ServiceCard";
+import { Container } from "@/components/layout/Container";
 
 const SERVICES = [
   {
@@ -48,35 +48,23 @@ const SERVICES = [
 
 export function Services() {
   return (
-    <section className="relative flex w-full flex-col items-start gap-10 overflow-hidden bg-surface-light-2 p-6 sm:p-10 lg:p-20">
-      <Image
-        src="/images/watermark-logo.png"
-        alt=""
-        width={440}
-        height={433}
-        className="pointer-events-none absolute left-[10%] top-[100px] opacity-5"
-      />
-      <Image
-        src="/images/watermark-logo.png"
-        alt=""
-        width={440}
-        height={433}
-        className="pointer-events-none absolute right-[10%] top-[100px] opacity-5"
-      />
-      <div className="relative flex w-full flex-col items-center justify-center gap-4 text-center">
-        <h2 className="font-heading text-h3 font-bold text-primary-800 md:text-h2">
-          Nos services
-        </h2>
-        <p className="w-[700px] max-w-full text-paragraph-lg text-black">
-          Des solutions adaptées à chaque situation, du premier emploi
-          jusqu&rsquo;à la retraite.
-        </p>
-      </div>
-      <div className="relative grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {SERVICES.map((service) => (
-          <ServiceCard key={service.title} {...service} />
-        ))}
-      </div>
+    <section className="relative flex w-full flex-col items-start overflow-hidden bg-surface-light-2 p-6 sm:p-10 lg:p-20">
+      <Container className="relative flex flex-col items-start gap-10">
+        <div className="relative flex w-full flex-col items-center justify-center gap-4 text-center">
+          <h2 className="font-heading text-h3 font-bold text-primary-800 md:text-h2">
+            Nos services
+          </h2>
+          <p className="w-[43.75rem] max-w-full text-paragraph-lg text-black">
+            Des solutions adaptées à chaque situation, du premier emploi
+            jusqu&rsquo;à la retraite.
+          </p>
+        </div>
+        <div className="relative grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((service) => (
+            <ServiceCard key={service.title} {...service} />
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

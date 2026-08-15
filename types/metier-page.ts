@@ -46,7 +46,7 @@ export interface MetierPageContent {
     title: string;
     breadcrumbs: BreadcrumbItem[];
   };
-  heroImage: {
+  heroImage?: {
     url: string;
     alt: string;
   };

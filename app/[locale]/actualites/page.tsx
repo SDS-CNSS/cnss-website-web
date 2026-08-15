@@ -6,6 +6,7 @@ import { ListFilters } from "@/components/ui/ListFilters";
 import { ActualitesGrid } from "@/components/actualites/ActualitesGrid";
 import { Pagination } from "@/components/ui/Pagination";
 import { getActualitesContent } from "@/lib/content/actualites";
+import { Container } from "@/components/layout/Container";
 
 type Props = PageProps<"/[locale]/actualites">;
 
@@ -27,23 +28,34 @@ export default async function ActualitesPage({ params }: Props) {
       <main className="flex flex-1 flex-col items-center">
         <PageBanner
           title="Actualités"
-          breadcrumbs={[{ label: "Accueil", href: "/" }, { label: "Actualités" }]}
+          breadcrumbs={[
+            { label: "Accueil", href: "/" },
+            { label: "Actualités" },
+          ]}
         />
 
-        <div className="flex w-full flex-col gap-10 px-4 py-10 md:px-10 lg:px-20">
-          <ListFilters
-            filters={[
-              { label: "Catégories", options: ["Événement", "Communiqué"] },
-              { label: "Public", options: ["Employeurs", "Travailleurs", "Retraités"] },
-            ]}
-          />
-          <ActualitesGrid
-            articles={content.articles}
-            totalCount={content.totalCount}
-            currentPage={content.currentPage}
-            totalPages={content.totalPages}
-          />
-          <Pagination currentPage={content.currentPage} totalPages={content.totalPages} />
+        <div className="w-full px-4 py-10 md:px-10 lg:px-20">
+          <Container className="flex flex-col gap-10">
+            <ListFilters
+              filters={[
+                { label: "Catégories", options: ["Événement", "Communiqué"] },
+                {
+                  label: "Public",
+                  options: ["Employeurs", "Travailleurs", "Retraités"],
+                },
+              ]}
+            />
+            <ActualitesGrid
+              articles={content.articles}
+              totalCount={content.totalCount}
+              currentPage={content.currentPage}
+              totalPages={content.totalPages}
+            />
+            <Pagination
+              currentPage={content.currentPage}
+              totalPages={content.totalPages}
+            />
+          </Container>
         </div>
       </main>
       <Footer />

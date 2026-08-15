@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { NewsCard } from "@/components/ui/NewsCard";
 import { Button } from "@/components/ui/Button";
+import { Container } from "@/components/layout/Container";
 
 const NEWS = [
   {
@@ -48,54 +49,56 @@ export function ActualitesCarousel() {
   };
 
   return (
-    <section className="flex w-full flex-col items-start gap-10 bg-surface p-6 sm:p-10 lg:gap-16 lg:p-20">
-      <div className="flex w-full flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-2.5">
-        <div className="flex flex-1 flex-col items-start gap-4">
-          <h2 className="font-heading text-h3 font-bold text-primary-800 md:text-h2">
-            Actualités
-          </h2>
-          <p className="text-paragraph-lg text-body">
-            Restez informé en temps réel sur les dernières réformes,
-            communiqués officiels et activités de la CNSS.
-          </p>
-        </div>
-        <div className="flex items-start gap-4">
-          <button
-            type="button"
-            aria-label="Actualité précédente"
-            onClick={() => scrollByCard(-1)}
-            className="flex size-12 items-center justify-center rounded-xl border-2 border-line-soft p-0.5 transition-colors hover:border-primary hover:text-primary"
-          >
-            <ChevronLeft className="size-4" />
-          </button>
-          <button
-            type="button"
-            aria-label="Actualité suivante"
-            onClick={() => scrollByCard(1)}
-            className="flex size-12 items-center justify-center rounded-xl border-2 border-line-soft p-0.5 transition-colors hover:border-primary hover:text-primary"
-          >
-            <ChevronRight className="size-4" />
-          </button>
-        </div>
-      </div>
-      <div
-        ref={trackRef}
-        className="flex w-full max-w-[1280px] snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {NEWS.map((item) => (
-          <div
-            key={item.title}
-            className="w-full max-w-[410.667px] shrink-0 snap-start"
-          >
-            <NewsCard {...item} />
+    <section className="flex w-full flex-col items-start bg-surface p-6 sm:p-10 lg:p-20">
+      <Container className="flex flex-col items-start gap-10 lg:gap-16">
+        <div className="flex w-full flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-2.5">
+          <div className="flex flex-1 flex-col items-start gap-4">
+            <h2 className="font-heading text-h3 font-bold text-primary-800 md:text-h2">
+              Actualités
+            </h2>
+            <p className="text-paragraph-lg text-body">
+              Restez informé en temps réel sur les dernières réformes,
+              communiqués officiels et activités de la CNSS.
+            </p>
           </div>
-        ))}
-      </div>
-      <div className="flex w-full flex-col items-center">
-        <Button href="/actualites" className="px-8 py-3 text-paragraph-lg">
-          Voir toutes les actualités
-        </Button>
-      </div>
+          <div className="flex items-start gap-4">
+            <button
+              type="button"
+              aria-label="Actualité précédente"
+              onClick={() => scrollByCard(-1)}
+              className="flex size-12 items-center justify-center rounded-xl border-2 border-line-soft p-0.5 transition-colors hover:border-primary hover:text-primary"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Actualité suivante"
+              onClick={() => scrollByCard(1)}
+              className="flex size-12 items-center justify-center rounded-xl border-2 border-line-soft p-0.5 transition-colors hover:border-primary hover:text-primary"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        </div>
+        <div
+          ref={trackRef}
+          className="flex w-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {NEWS.map((item) => (
+            <div
+              key={item.title}
+              className="w-full max-w-[25.6667rem] shrink-0 snap-start"
+            >
+              <NewsCard {...item} />
+            </div>
+          ))}
+        </div>
+        <div className="flex w-full flex-col items-center">
+          <Button href="/actualites" className="px-8 py-3 text-paragraph-lg">
+            Voir toutes les actualités
+          </Button>
+        </div>
+      </Container>
     </section>
   );
 }

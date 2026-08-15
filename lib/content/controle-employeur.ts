@@ -177,7 +177,7 @@ const controleEmployeurContent: MetierPageContent = {
             },
             {
               type: "paragraph",
-              text: "L'astreinte […] est liquidée par le Directeur Général de la Caisse qui la recouvre dans les mêmes conditions que les cotisations.",
+              text: "L'astreinte est liquidée par le Directeur Général de la Caisse qui la recouvre dans les mêmes conditions que les cotisations.",
             },
           ],
         },

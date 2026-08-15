@@ -3,6 +3,8 @@ import { Raleway, Alexandria } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { ChatWidget } from "@/components/ui/ChatWidget";
+import { BackToTopButton } from "@/components/ui/BackToTopButton";
 import "../globals.css";
 
 const raleway = Raleway({
@@ -39,10 +41,13 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      data-scroll-behavior="smooth"
       className={`${raleway.variable} ${alexandria.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <BackToTopButton />
+        <ChatWidget />
       </body>
     </html>
   );

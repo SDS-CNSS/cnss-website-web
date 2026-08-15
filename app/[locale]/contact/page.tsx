@@ -24,7 +24,10 @@ export default async function ContactPage({ params }: Props) {
     <>
       <Header />
       <main className="flex flex-1 flex-col items-center">
-        <PageBanner title={content.banner.title} breadcrumbs={content.banner.breadcrumbs} />
+        <PageBanner
+          title={content.banner.title}
+          breadcrumbs={content.banner.breadcrumbs}
+        />
         <ContactSection coordonnees={content.coordonnees} form={content.form} />
       </main>
       <Footer />

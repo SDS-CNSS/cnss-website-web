@@ -39,7 +39,9 @@ export function MetierSidebarNav({ items }: MetierSidebarNavProps) {
             key={item.id}
             href={`#${item.id}`}
             className={`flex items-center border-l px-0 py-3 text-lg font-medium transition-colors ${
-              isActive ? "border-primary text-primary" : "border-line text-ink hover:border-primary-200"
+              isActive
+                ? "border-primary text-primary"
+                : "border-line text-ink hover:border-primary-200"
             }`}
           >
             <span className="pl-4">{item.label}</span>

@@ -26,8 +26,14 @@ export default async function AProposPage({ params }: Props) {
     <>
       <Header />
       <main className="flex flex-1 flex-col items-center">
-        <PageBanner title={content.banner.title} breadcrumbs={content.banner.breadcrumbs} />
-        <MissionGouvernance mission={content.mission} gouvernance={content.gouvernance} />
+        <PageBanner
+          title={content.banner.title}
+          breadcrumbs={content.banner.breadcrumbs}
+        />
+        <MissionGouvernance
+          mission={content.mission}
+          gouvernance={content.gouvernance}
+        />
         <HistoireTimeline
           title={content.histoire.title}
           description={content.histoire.description}

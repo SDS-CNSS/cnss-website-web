@@ -11,7 +11,13 @@ type SelectProps = {
   onValueChange?: (value: string) => void;
 };
 
-export function Select({ label, options, className, value, onValueChange }: SelectProps) {
+export function Select({
+  label,
+  options,
+  className,
+  value,
+  onValueChange,
+}: SelectProps) {
   return (
     <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
       <SelectPrimitive.Trigger

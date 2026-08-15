@@ -12,7 +12,11 @@ const variantStyles = {
   primary: "border border-primary bg-surface text-primary-800",
 } as const;
 
-export function InfoAlert({ title, description, variant = "info" }: InfoAlertProps) {
+export function InfoAlert({
+  title,
+  description,
+  variant = "info",
+}: InfoAlertProps) {
   return (
     <div
       className={`flex flex-1 items-start gap-4 rounded-lg p-4 shadow-[0px_0px_4px_0px_rgba(0,0,0,0.1)] ${variantStyles[variant]}`}

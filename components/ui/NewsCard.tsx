@@ -27,7 +27,7 @@ export function NewsCard({
 }: NewsCardProps) {
   return (
     <Link href={href} className="group flex w-full flex-col items-start gap-4">
-      <div className="relative h-[254px] w-full overflow-hidden rounded-2xl border border-line-soft">
+      <div className="relative h-[15.875rem] w-full overflow-hidden rounded-2xl border border-line-soft">
         <Image
           src={image}
           alt=""
@@ -36,7 +36,9 @@ export function NewsCard({
         />
       </div>
       <div className="flex items-center gap-2 pt-2">
-        <Badge variant={CATEGORY_VARIANTS[category]}>{category.toUpperCase()}</Badge>
+        <Badge variant={CATEGORY_VARIANTS[category]}>
+          {category.toUpperCase()}
+        </Badge>
         <div className="flex items-center gap-1">
           <Calendar className="size-3 text-ink-soft" />
           <span className="text-xs text-ink-soft">{date}</span>

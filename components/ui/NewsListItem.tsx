@@ -9,10 +9,20 @@ const CATEGORY_VARIANTS: Record<NewsCardProps["category"], BadgeVariant> = {
   communiqué: "warning",
 };
 
-export function NewsListItem({ image, category, date, title, excerpt, href }: NewsCardProps) {
+export function NewsListItem({
+  image,
+  category,
+  date,
+  title,
+  excerpt,
+  href,
+}: NewsCardProps) {
   return (
-    <Link href={href} className="group flex w-full flex-col items-start gap-4 py-6 sm:flex-row sm:gap-6">
-      <div className="relative h-[256px] w-[350px] max-w-full shrink-0 overflow-hidden rounded-xl border border-line-soft">
+    <Link
+      href={href}
+      className="group flex w-full flex-col items-start gap-4 py-6 sm:flex-row sm:gap-6"
+    >
+      <div className="relative h-[16rem] w-[21.875rem] max-w-full shrink-0 overflow-hidden rounded-xl border border-line-soft">
         <Image
           src={image}
           alt=""
@@ -22,7 +32,9 @@ export function NewsListItem({ image, category, date, title, excerpt, href }: Ne
       </div>
       <div className="flex flex-1 flex-col items-start gap-3">
         <div className="flex items-center gap-2">
-          <Badge variant={CATEGORY_VARIANTS[category]}>{category.toUpperCase()}</Badge>
+          <Badge variant={CATEGORY_VARIANTS[category]}>
+            {category.toUpperCase()}
+          </Badge>
           <div className="flex items-center gap-1">
             <Calendar className="size-3 text-ink-soft" />
             <span className="text-xs text-ink-soft">{date}</span>

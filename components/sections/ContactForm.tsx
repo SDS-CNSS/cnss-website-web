@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import { User, Mail, Phone, MessageSquare, MapPin, AlignLeft, CheckCircle2 } from "lucide-react";
+import {
+  User,
+  Mail,
+  Phone,
+  MessageSquare,
+  MapPin,
+  AlignLeft,
+  CheckCircle2,
+} from "lucide-react";
 
 type ContactFormProps = {
   title: string;
@@ -34,14 +42,30 @@ const INITIAL_STATE: FormState = {
   message: "",
 };
 
-const REQUIRED_FIELDS: (keyof FormState)[] = ["nom", "prenoms", "email", "sujet", "message"];
+const REQUIRED_FIELDS: (keyof FormState)[] = [
+  "nom",
+  "prenoms",
+  "email",
+  "sujet",
+  "message",
+];
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-const inputClassName = "w-full text-base text-ink placeholder:text-muted focus:outline-none";
-const fieldWrapperClassName = "flex h-12 w-full items-center gap-3 rounded-md border border-line bg-surface px-3";
+const inputClassName =
+  "w-full text-base text-ink placeholder:text-muted focus:outline-none";
+const fieldWrapperClassName =
+  "flex h-12 w-full items-center gap-3 rounded-md border border-line bg-surface px-3";
 
-function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: ReactNode }) {
+function Field({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  children: ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={htmlFor} className="text-base font-medium text-ink">
@@ -65,7 +89,10 @@ export function ContactForm({
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [status, setStatus] = useState<Status>("idle");
 
-  function updateField<K extends keyof FormState>(field: K, value: FormState[K]) {
+  function updateField<K extends keyof FormState>(
+    field: K,
+    value: FormState[K],
+  ) {
     setForm((prev) => ({ ...prev, [field]: value }));
     if (status === "error") setStatus("idle");
   }
@@ -73,7 +100,9 @@ export function ContactForm({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const hasEmptyField = REQUIRED_FIELDS.some((field) => form[field].trim() === "");
+    const hasEmptyField = REQUIRED_FIELDS.some(
+      (field) => form[field].trim() === "",
+    );
     if (hasEmptyField) {
       setStatus("error");
       return;
@@ -88,12 +117,16 @@ export function ContactForm({
   if (status === "success") {
     return (
       <div className="flex w-full flex-1 flex-col items-start gap-6">
-        <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">{title}</h2>
+        <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">
+          {title}
+        </h2>
         <div className="flex w-full flex-col items-center gap-4 rounded-2xl bg-surface p-10 text-center shadow-[0px_0px_10px_0px_rgba(0,0,0,0.05)]">
           <div className="flex size-14 items-center justify-center rounded-full bg-surface-light text-primary">
             <CheckCircle2 className="size-7" />
           </div>
-          <p className="text-paragraph-lg font-medium text-ink">{successMessage}</p>
+          <p className="text-paragraph-lg font-medium text-ink">
+            {successMessage}
+          </p>
           <button
             type="button"
             onClick={() => setStatus("idle")}
@@ -108,7 +141,9 @@ export function ContactForm({
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-6">
-      <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">{title}</h2>
+      <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">
+        {title}
+      </h2>
       <form
         onSubmit={handleSubmit}
         noValidate
@@ -165,7 +200,9 @@ export function ContactForm({
                 type="tel"
                 placeholder="Téléphone"
                 value={form.telephone}
-                onChange={(event) => updateField("telephone", event.target.value)}
+                onChange={(event) =>
+                  updateField("telephone", event.target.value)
+                }
                 className={inputClassName}
               />
             </label>
@@ -194,7 +231,9 @@ export function ContactForm({
               type="text"
               placeholder={contactPointPlaceholder}
               value={form.pointsContact}
-              onChange={(event) => updateField("pointsContact", event.target.value)}
+              onChange={(event) =>
+                updateField("pointsContact", event.target.value)
+              }
               className={inputClassName}
             />
           </label>
@@ -214,7 +253,9 @@ export function ContactForm({
           </label>
         </Field>
 
-        {status === "error" && <p className="text-sm font-medium text-red-600">{errorMessage}</p>}
+        {status === "error" && (
+          <p className="text-sm font-medium text-red-600">{errorMessage}</p>
+        )}
 
         <button
           type="submit"

@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { RichContent } from "@/components/ui/RichContent";
 import { InfoAlert } from "@/components/ui/InfoAlert";
 import { RateCard } from "@/components/ui/RateCard";
@@ -11,17 +12,27 @@ const variantStyles = {
   white: "border border-line bg-surface",
 } as const;
 
-export function MetierSection({ id, number, title, variant, subsections }: MetierSectionProps) {
+export function MetierSection({
+  id,
+  number,
+  title,
+  variant,
+  subsections,
+}: MetierSectionProps) {
   return (
     <section
       id={id}
       className={`scroll-mt-24 flex flex-col gap-6 rounded-lg p-4 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.02)] md:p-6 ${variantStyles[variant]}`}
     >
       <div className="flex items-center gap-4 border-b border-primary-800 pb-3">
-        <div className="flex size-[50px] shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-primary-hover to-primary-900">
-          <span className="font-heading text-h3 font-semibold text-on-primary">{number}</span>
+        <div className="flex size-[3.125rem] shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-primary-hover to-primary-900">
+          <span className="font-heading text-h3 font-semibold text-on-primary">
+            {number}
+          </span>
         </div>
-        <h2 className="font-heading text-h4 font-semibold text-primary-800 md:text-h3">{title}</h2>
+        <h2 className="font-heading text-h4 font-semibold text-primary-800 md:text-h3">
+          {title}
+        </h2>
       </div>
       <div className="flex flex-col gap-10">
         {subsections.map((subsection, index) => (
@@ -57,17 +68,26 @@ export function MetierSection({ id, number, title, variant, subsections }: Metie
                 ))}
               </div>
             )}
-            {subsection.link && (
-              <a
-                href={subsection.link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 inline-flex items-center gap-1 self-start border-b border-link text-sm font-bold text-link"
-              >
-                {subsection.link.label}
-                <ArrowRight className="size-4" />
-              </a>
-            )}
+            {subsection.link &&
+              (subsection.link.href.startsWith("/") ? (
+                <Link
+                  href={subsection.link.href}
+                  className="mt-1 inline-flex items-center gap-1 self-start border-b border-link text-sm font-bold text-link"
+                >
+                  {subsection.link.label}
+                  <ArrowRight className="size-4" />
+                </Link>
+              ) : (
+                <a
+                  href={subsection.link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-flex items-center gap-1 self-start border-b border-link text-sm font-bold text-link"
+                >
+                  {subsection.link.label}
+                  <ArrowRight className="size-4" />
+                </a>
+              ))}
           </div>
         ))}
       </div>

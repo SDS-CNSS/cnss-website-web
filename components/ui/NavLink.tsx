@@ -19,8 +19,8 @@ export function NavLink({ label, href, dropdown }: NavLinkProps) {
   const active = !!href && isPathActive(pathname, href);
 
   const className = active
-    ? "flex items-center gap-1.5 border-b border-primary-hover pb-[3px] text-base font-medium text-primary-hover"
-    : "flex items-center gap-1.5 border-b border-transparent pb-[3px] text-base font-medium text-body";
+    ? "flex items-center gap-1.5 border-b border-primary-hover pb-[0.1875rem] text-base font-medium text-primary-hover"
+    : "flex items-center gap-1.5 border-b border-transparent pb-[0.1875rem] text-base font-medium text-body";
 
   if (dropdown) {
     return (
@@ -32,7 +32,11 @@ export function NavLink({ label, href, dropdown }: NavLinkProps) {
   }
 
   return (
-    <Link href={href ?? "#"} className={className} aria-current={active ? "page" : undefined}>
+    <Link
+      href={href ?? "#"}
+      className={className}
+      aria-current={active ? "page" : undefined}
+    >
       {label}
     </Link>
   );
