@@ -7,12 +7,8 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { SearchBox } from "@/components/layout/SearchBox";
-import {
-  METIERS_TABS,
-  SIMULATEURS_TABS,
-  RESSOURCES_ITEMS,
-  isNavPathActive,
-} from "@/components/layout/navData";
+import { isNavPathActive } from "@/components/layout/navData";
+import type { MegaMenuTab, SimulateurTab, RessourceItem } from "@/types/navigation";
 
 function Collapse({ open, children }: { open: boolean; children: ReactNode }) {
   return (
@@ -134,7 +130,17 @@ function MobileNestedAccordion({
   );
 }
 
-export function MobileNav() {
+type MobileNavProps = {
+  metiersTabs: MegaMenuTab[];
+  simulateursTabs: SimulateurTab[];
+  ressourcesItems: RessourceItem[];
+};
+
+export function MobileNav({
+  metiersTabs: METIERS_TABS,
+  simulateursTabs: SIMULATEURS_TABS,
+  ressourcesItems: RESSOURCES_ITEMS,
+}: MobileNavProps) {
   const t = useTranslations("nav");
   const tMetiers = useTranslations("megaMenu.metiers");
   const tSimulateurs = useTranslations("megaMenu.simulateurs");

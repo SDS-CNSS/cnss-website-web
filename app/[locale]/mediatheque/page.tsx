@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
@@ -11,17 +12,38 @@ import { Container } from "@/components/layout/Container";
 
 type Props = PageProps<"/[locale]/mediatheque">;
 
+const PER_PAGE = 6;
+
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return buildMetadata({
     title: "Médiathèque | CNSS Bénin",
     description:
       "Photos et vidéos des événements et actions de la Caisse Nationale de Sécurité Sociale du Bénin.",
-  };
+    path: "/mediatheque",
+  });
 }
 
-export default async function MediathequePage({ params }: Props) {
+export default async function MediathequePage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const resolvedSearchParams = await searchParams;
   const content = await getMediathequeContent(locale);
+
+  const totalCount = content.items.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE));
+  const rawPage = resolvedSearchParams.page;
+  const pageParam = typeof rawPage === "string" ? Number(rawPage) : 1;
+  const currentPage = Math.min(
+    Math.max(1, Number.isFinite(pageParam) ? pageParam : 1),
+    totalPages,
+  );
+  const items = content.items.slice(
+    (currentPage - 1) * PER_PAGE,
+    currentPage * PER_PAGE,
+  );
+
+  function getHref(page: number) {
+    return `/mediatheque${page > 1 ? `?page=${page}` : ""}`;
+  }
 
   return (
     <>
@@ -49,19 +71,20 @@ export default async function MediathequePage({ params }: Props) {
 
             <div className="flex w-full flex-col gap-8">
               <ResultsBar
-                label={`${content.totalCount} Médias | Page ${content.currentPage} sur ${content.totalPages}`}
+                label={`${totalCount} Médias | Page ${currentPage} sur ${totalPages}`}
               />
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {content.items.map((item) => (
+                {items.map((item) => (
                   <MediaCard key={item.title} {...item} />
                 ))}
               </div>
             </div>
 
             <Pagination
-              currentPage={content.currentPage}
-              totalPages={content.totalPages}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              getHref={getHref}
             />
           </Container>
         </div>

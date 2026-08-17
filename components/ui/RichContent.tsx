@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { RichContentBlock } from "@/types/rich-content";
+import type { RichContentBlock, RichContentListItem } from "@/types/rich-content";
 
 type RichContentProps = {
   blocks: RichContentBlock[];
@@ -7,6 +7,29 @@ type RichContentProps = {
   paragraphClassName?: string;
   listItemClassName?: string;
 };
+
+function renderListItem(item: string | RichContentListItem) {
+  if (typeof item === "string") {
+    return item;
+  }
+
+  const text = item.href ? (
+    <a href={item.href} className="text-link underline">
+      {item.text}
+    </a>
+  ) : (
+    item.text
+  );
+
+  return item.label ? (
+    <>
+      <span className="font-semibold text-ink">{item.label} : </span>
+      {text}
+    </>
+  ) : (
+    text
+  );
+}
 
 export function RichContent({
   blocks,
@@ -19,26 +42,34 @@ export function RichContent({
       {blocks.map((block, index) =>
         block.type === "list" ? (
           <ul key={index} className="flex flex-col gap-1.5">
-            {block.items?.map((item) => (
+            {block.items?.map((item, itemIndex) => (
               <li
-                key={item}
+                key={itemIndex}
                 className={listItemClassName ?? paragraphClassName}
               >
-                – {item}
+                – {renderListItem(item)}
               </li>
             ))}
           </ul>
         ) : block.type === "orderedList" ? (
           <ol key={index} className="flex flex-col gap-1.5 list-decimal pl-5">
-            {block.items?.map((item) => (
+            {block.items?.map((item, itemIndex) => (
               <li
-                key={item}
+                key={itemIndex}
                 className={listItemClassName ?? paragraphClassName}
               >
-                {item}
+                {renderListItem(item)}
               </li>
             ))}
           </ol>
+        ) : block.type === "paragraphWithLink" ? (
+          <p key={index} className={paragraphClassName}>
+            {block.before}
+            <a href={block.href} className="text-link underline">
+              {block.linkText}
+            </a>
+            {block.after}
+          </p>
         ) : block.type === "definitionList" ? (
           <div key={index} className="flex flex-col gap-4">
             {block.definitions?.map((definition) => (

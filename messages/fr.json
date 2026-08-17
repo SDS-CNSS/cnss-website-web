@@ -15,7 +15,10 @@
       "description": "Recevez périodiquement les actualités de la CNSS directement dans votre boîte mail.",
       "firstNamePlaceholder": "Prénom",
       "emailPlaceholder": "Adresse mail",
-      "submit": "S'abonner"
+      "submit": "S'abonner",
+      "submitting": "Inscription...",
+      "successMessage": "Merci ! Vous êtes bien inscrit(e) à la newsletter.",
+      "errorMessage": "Merci de renseigner votre prénom et une adresse mail valide."
     },
     "quickLinksTitle": "Liens Utiles",
     "quickLinks": {

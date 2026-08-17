@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
@@ -12,10 +13,11 @@ type Props = PageProps<"/[locale]/simulateurs/pension">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const content = await getPensionContent(locale);
-  return {
+  return buildMetadata({
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
-  };
+    path: "/simulateurs/pension",
+  });
 }
 
 export default async function PensionSimulateurPage({ params }: Props) {

@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
-import { METIERS_TABS as TABS } from "@/components/layout/navData";
+import type { MegaMenuTab } from "@/types/navigation";
 
 function IconChip({ src }: { src: string }) {
   return (
@@ -20,8 +20,8 @@ function isPathActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function findTabKeyForPath(pathname: string): string | undefined {
-  return TABS.find((t) =>
+function findTabKeyForPath(tabs: MegaMenuTab[], pathname: string): string | undefined {
+  return tabs.find((t) =>
     t.columns.some((column) => {
       if (column.href && isPathActive(pathname, column.href)) return true;
       return (
@@ -31,12 +31,12 @@ function findTabKeyForPath(pathname: string): string | undefined {
   )?.key;
 }
 
-export function MetiersMegaMenu() {
+export function MetiersMegaMenu({ tabs: TABS }: { tabs: MegaMenuTab[] }) {
   const t = useTranslations("megaMenu.metiers");
   const pathname = usePathname();
   const activeRouteTabKey = useMemo(
-    () => findTabKeyForPath(pathname),
-    [pathname],
+    () => findTabKeyForPath(TABS, pathname),
+    [TABS, pathname],
   );
   const isRouteActive = !!activeRouteTabKey;
 

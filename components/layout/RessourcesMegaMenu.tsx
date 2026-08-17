@@ -3,21 +3,26 @@
 import { useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, File, FileImage, type LucideIcon } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
-import { RESSOURCES_ITEMS as ITEMS } from "@/components/layout/navData";
+import type { RessourceItem } from "@/types/navigation";
+
+const RESSOURCE_ICONS: Record<string, LucideIcon> = {
+  file: File,
+  fileImage: FileImage,
+};
 
 function isPathActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function RessourcesMegaMenu() {
+export function RessourcesMegaMenu({ items: ITEMS }: { items: RessourceItem[] }) {
   const t = useTranslations("megaMenu.ressources");
   const pathname = usePathname();
   const isRouteActive = useMemo(
     () => ITEMS.some((item) => isPathActive(pathname, item.href)),
-    [pathname],
+    [ITEMS, pathname],
   );
 
   const { open, setOpen } = useMegaMenu("ressources");
@@ -75,21 +80,24 @@ export function RessourcesMegaMenu() {
               className="pointer-events-none absolute -top-16 -right-14 opacity-5"
             />
 
-            {ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="group relative z-10 flex items-center gap-4"
-              >
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-[5px] border border-primary-100 bg-surface-light-2">
-                  <item.icon className="size-5 text-ink" />
-                </div>
-                <p className="text-paragraph-lg font-semibold whitespace-nowrap text-body transition-colors group-hover:text-ink group-hover:underline">
-                  {t(item.labelKey)}
-                </p>
-              </Link>
-            ))}
+            {ITEMS.map((item) => {
+              const Icon = RESSOURCE_ICONS[item.icon];
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="group relative z-10 flex items-center gap-4"
+                >
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-[5px] border border-primary-100 bg-surface-light-2">
+                    <Icon className="size-5 text-ink" />
+                  </div>
+                  <p className="text-paragraph-lg font-semibold whitespace-nowrap text-body transition-colors group-hover:text-ink group-hover:underline">
+                    {t(item.labelKey)}
+                  </p>
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}

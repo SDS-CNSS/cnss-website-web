@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -15,10 +16,11 @@ type Props = PageProps<"/[locale]/prestations/allocations-prenatales">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const content = await getAllocationsPrenatalesContent(locale);
-  return {
+  return buildMetadata({
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
-  };
+    path: "/prestations/allocations-prenatales",
+  });
 }
 
 export default async function AllocationsPrenatalesPage({ params }: Props) {

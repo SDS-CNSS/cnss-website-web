@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -15,10 +16,11 @@ type Props = PageProps<"/[locale]/recouvrement/controle-employeur">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const content = await getControleEmployeurContent(locale);
-  return {
+  return buildMetadata({
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
-  };
+    path: "/recouvrement/controle-employeur",
+  });
 }
 
 export default async function ControleEmployeurPage({ params }: Props) {

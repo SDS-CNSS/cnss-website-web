@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { NavLink } from "@/components/ui/NavLink";
@@ -9,13 +9,20 @@ import { MegaMenuProvider } from "@/components/layout/MegaMenuContext";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Container } from "@/components/layout/Container";
 import { SearchBox } from "@/components/layout/SearchBox";
+import { getNavigationContent } from "@/lib/content/navigation";
 
-export function Header() {
-  const t = useTranslations("nav");
+export async function Header() {
+  const t = await getTranslations("nav");
+  const locale = await getLocale();
+  const { metiersTabs, simulateursTabs, ressourcesItems } = await getNavigationContent(locale);
 
   return (
     <header className="flex w-full flex-col items-start">
-      <MobileNav />
+      <MobileNav
+        metiersTabs={metiersTabs}
+        simulateursTabs={simulateursTabs}
+        ressourcesItems={ressourcesItems}
+      />
 
       <div className="hidden w-full bg-surface px-20 lg:block">
         <Container className="hidden items-center justify-between py-4 lg:flex">
@@ -29,10 +36,10 @@ export function Header() {
             <NavLink label={t("accueil")} href="/" />
             <NavLink label={t("aPropos")} href="/a-propos" />
             <MegaMenuProvider>
-              <MetiersMegaMenu />
-              <SimulateursMegaMenu />
+              <MetiersMegaMenu tabs={metiersTabs} />
+              <SimulateursMegaMenu tabs={simulateursTabs} />
               <NavLink label={t("actualites")} href="/actualites" />
-              <RessourcesMegaMenu />
+              <RessourcesMegaMenu items={ressourcesItems} />
             </MegaMenuProvider>
           </nav>
           <Button href="/contact">{t("contact")}</Button>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
@@ -15,9 +16,14 @@ const RESULTS_PER_PAGE = 8;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Résultats de recherche | CNSS Bénin",
-    description:
-      "Résultats de recherche sur le site officiel de la CNSS Bénin.",
+    ...buildMetadata({
+      title: "Résultats de recherche | CNSS Bénin",
+      description:
+        "Résultats de recherche sur le site officiel de la CNSS Bénin.",
+      path: "/recherche",
+    }),
+    // Pages de résultats de recherche : pas d'intérêt à indexer les variantes de requête.
+    robots: { index: false, follow: true },
   };
 }
 

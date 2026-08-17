@@ -9,9 +9,6 @@ export interface MediaItem {
 
 export interface MediathequeContent {
   items: MediaItem[];
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
 }
 
 const items: MediaItem[] = [
@@ -54,12 +51,7 @@ const items: MediaItem[] = [
 ];
 
 const contentByLocale: Record<Locale, MediathequeContent> = {
-  fr: {
-    items,
-    totalCount: 32,
-    totalPages: 3,
-    currentPage: 1,
-  },
+  fr: { items },
 };
 
 export async function getMediathequeContent(locale: string): Promise<MediathequeContent> {

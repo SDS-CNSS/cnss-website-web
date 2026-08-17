@@ -90,3 +90,8 @@ export async function getArticleDetailContent(
   const localeArticles = contentByLocale[locale as Locale] ?? contentByLocale.fr;
   return localeArticles[slug];
 }
+
+export async function getAllArticleSlugs(locale: string): Promise<string[]> {
+  const localeArticles = contentByLocale[locale as Locale] ?? contentByLocale.fr;
+  return Object.keys(localeArticles);
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
@@ -12,10 +13,11 @@ type Props = PageProps<"/[locale]/simulateurs/pension-survivants-conjoints">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const content = await getPensionSurvivantsConjointsContent(locale);
-  return {
+  return buildMetadata({
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
-  };
+    path: "/simulateurs/pension-survivants-conjoints",
+  });
 }
 
 export default async function PensionSurvivantsConjointsPage({

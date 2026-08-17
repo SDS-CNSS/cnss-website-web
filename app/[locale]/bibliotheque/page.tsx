@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
@@ -11,17 +12,38 @@ import { Container } from "@/components/layout/Container";
 
 type Props = PageProps<"/[locale]/bibliotheque">;
 
+const PER_PAGE = 6;
+
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return buildMetadata({
     title: "Bibliothèque | CNSS Bénin",
     description:
       "Formulaires, attestations et documents utiles de la Caisse Nationale de Sécurité Sociale du Bénin.",
-  };
+    path: "/bibliotheque",
+  });
 }
 
-export default async function BibliothequePage({ params }: Props) {
+export default async function BibliothequePage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const resolvedSearchParams = await searchParams;
   const content = await getBibliothequeContent(locale);
+
+  const totalCount = content.documents.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE));
+  const rawPage = resolvedSearchParams.page;
+  const pageParam = typeof rawPage === "string" ? Number(rawPage) : 1;
+  const currentPage = Math.min(
+    Math.max(1, Number.isFinite(pageParam) ? pageParam : 1),
+    totalPages,
+  );
+  const documents = content.documents.slice(
+    (currentPage - 1) * PER_PAGE,
+    currentPage * PER_PAGE,
+  );
+
+  function getHref(page: number) {
+    return `/bibliotheque${page > 1 ? `?page=${page}` : ""}`;
+  }
 
   return (
     <>
@@ -58,19 +80,20 @@ export default async function BibliothequePage({ params }: Props) {
 
             <div className="flex w-full flex-col gap-8">
               <ResultsBar
-                label={`${content.totalCount} Documents | Page ${content.currentPage} sur ${content.totalPages}`}
+                label={`${totalCount} Documents | Page ${currentPage} sur ${totalPages}`}
               />
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {content.documents.map((document) => (
+                {documents.map((document) => (
                   <DocumentCard key={document.title} {...document} />
                 ))}
               </div>
             </div>
 
             <Pagination
-              currentPage={content.currentPage}
-              totalPages={content.totalPages}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              getHref={getHref}
             />
           </Container>
         </div>

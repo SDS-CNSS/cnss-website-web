@@ -11,9 +11,6 @@ export interface DocumentItem {
 
 export interface BibliothequeContent {
   documents: DocumentItem[];
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
 }
 
 const documents: DocumentItem[] = [
@@ -68,12 +65,7 @@ const documents: DocumentItem[] = [
 ];
 
 const contentByLocale: Record<Locale, BibliothequeContent> = {
-  fr: {
-    documents,
-    totalCount: 45,
-    totalPages: 4,
-    currentPage: 1,
-  },
+  fr: { documents },
 };
 
 export async function getBibliothequeContent(locale: string): Promise<BibliothequeContent> {

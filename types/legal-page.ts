@@ -1,25 +1,10 @@
 import type { BreadcrumbItem } from "@/types/breadcrumb";
-
-export interface LegalListItem {
-  label?: string;
-  text: string;
-  href?: string;
-}
-
-export interface LegalBlock {
-  type: "paragraph" | "list" | "paragraphWithLink";
-  text?: string;
-  items?: LegalListItem[];
-  before?: string;
-  linkText?: string;
-  href?: string;
-  after?: string;
-}
+import type { RichContentBlock } from "@/types/rich-content";
 
 export interface LegalSectionContent {
   id: string;
   title: string;
-  blocks: LegalBlock[];
+  blocks: RichContentBlock[];
 }
 
 export interface LegalPageContent {

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ChatWidget } from "@/components/ui/ChatWidget";
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
+import { SITE_URL, buildMetadata } from "@/lib/seo";
 import "../globals.css";
 
 const raleway = Raleway({
@@ -20,9 +21,13 @@ const alexandria = Alexandria({
 });
 
 export const metadata: Metadata = {
-  title: "CNSS - Caisse Nationale de Sécurité Sociale du Bénin",
-  description:
-    "Site officiel de la Caisse Nationale de Sécurité Sociale du Bénin (CNSS).",
+  metadataBase: new URL(SITE_URL),
+  ...buildMetadata({
+    title: "CNSS - Caisse Nationale de Sécurité Sociale du Bénin",
+    description:
+      "Site officiel de la Caisse Nationale de Sécurité Sociale du Bénin (CNSS).",
+    path: "/",
+  }),
 };
 
 export function generateStaticParams() {

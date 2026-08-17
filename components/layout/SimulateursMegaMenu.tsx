@@ -6,24 +6,24 @@ import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useMegaMenu } from "@/components/layout/MegaMenuContext";
-import { SIMULATEURS_TABS as TABS } from "@/components/layout/navData";
+import type { SimulateurTab } from "@/types/navigation";
 
 function isPathActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function findTabKeyForPath(pathname: string): string | undefined {
-  return TABS.find((t) =>
+function findTabKeyForPath(tabs: SimulateurTab[], pathname: string): string | undefined {
+  return tabs.find((t) =>
     t.items.some((item) => isPathActive(pathname, item.href)),
   )?.key;
 }
 
-export function SimulateursMegaMenu() {
+export function SimulateursMegaMenu({ tabs: TABS }: { tabs: SimulateurTab[] }) {
   const t = useTranslations("megaMenu.simulateurs");
   const pathname = usePathname();
   const activeRouteTabKey = useMemo(
-    () => findTabKeyForPath(pathname),
-    [pathname],
+    () => findTabKeyForPath(TABS, pathname),
+    [TABS, pathname],
   );
   const isRouteActive = !!activeRouteTabKey;
 

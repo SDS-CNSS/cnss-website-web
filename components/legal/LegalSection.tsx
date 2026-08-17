@@ -1,6 +1,11 @@
 import type { LegalSectionContent } from "@/types/legal-page";
+import type { RichContentListItem } from "@/types/rich-content";
 
 type LegalSectionProps = LegalSectionContent;
+
+function toListItem(item: string | RichContentListItem): RichContentListItem {
+  return typeof item === "string" ? { text: item } : item;
+}
 
 export function LegalSection({ id, title, blocks }: LegalSectionProps) {
   return (
@@ -12,28 +17,31 @@ export function LegalSection({ id, title, blocks }: LegalSectionProps) {
         {blocks.map((block, index) =>
           block.type === "list" ? (
             <ul key={index} className="flex flex-col gap-2">
-              {block.items?.map((item, itemIndex) => (
-                <li
-                  key={itemIndex}
-                  className="flex items-start gap-2 text-base font-medium text-body md:text-lg"
-                >
-                  <span className="text-primary">•</span>
-                  <span>
-                    {item.label && (
-                      <span className="font-semibold text-ink">
-                        {item.label} :{" "}
-                      </span>
-                    )}
-                    {item.href ? (
-                      <a href={item.href} className="text-link underline">
-                        {item.text}
-                      </a>
-                    ) : (
-                      item.text
-                    )}
-                  </span>
-                </li>
-              ))}
+              {block.items?.map((rawItem, itemIndex) => {
+                const item = toListItem(rawItem);
+                return (
+                  <li
+                    key={itemIndex}
+                    className="flex items-start gap-2 text-base font-medium text-body md:text-lg"
+                  >
+                    <span className="text-primary">•</span>
+                    <span>
+                      {item.label && (
+                        <span className="font-semibold text-ink">
+                          {item.label} :{" "}
+                        </span>
+                      )}
+                      {item.href ? (
+                        <a href={item.href} className="text-link underline">
+                          {item.text}
+                        </a>
+                      ) : (
+                        item.text
+                      )}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           ) : block.type === "paragraphWithLink" ? (
             <p

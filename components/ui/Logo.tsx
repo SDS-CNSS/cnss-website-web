@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 
 type LogoProps = {
   className?: string;
@@ -6,7 +7,7 @@ type LogoProps = {
 
 export function Logo({ className }: LogoProps) {
   return (
-    <div className={`flex items-center gap-2 ${className ?? ""}`}>
+    <Link href="/" className={`flex items-center gap-2 ${className ?? ""}`}>
       <Image
         src="/images/logo-cnss.png"
         alt="CNSS - Caisse Nationale de Sécurité Sociale du Bénin"
@@ -19,6 +20,6 @@ export function Logo({ className }: LogoProps) {
         <br />
         SÉCURITÉ SOCIALE DU BÉNIN
       </p>
-    </div>
+    </Link>
   );
 }

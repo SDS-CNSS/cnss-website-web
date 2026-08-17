@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
@@ -12,10 +13,11 @@ type Props = PageProps<"/[locale]/simulateurs/charges-sociales-embauche">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const content = await getChargesSocialesEmbaucheContent(locale);
-  return {
+  return buildMetadata({
     title: content.seo.metaTitle,
     description: content.seo.metaDescription,
-  };
+    path: "/simulateurs/charges-sociales-embauche",
+  });
 }
 
 export default async function ChargesSocialesEmbauchePage({ params }: Props) {

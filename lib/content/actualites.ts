@@ -3,9 +3,6 @@ import type { NewsCardProps } from "@/components/ui/NewsCard";
 
 export interface ActualitesContent {
   articles: NewsCardProps[];
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
 }
 
 const articles: NewsCardProps[] = [
@@ -66,12 +63,7 @@ const articles: NewsCardProps[] = [
 ];
 
 const contentByLocale: Record<Locale, ActualitesContent> = {
-  fr: {
-    articles,
-    totalCount: 120,
-    totalPages: 8,
-    currentPage: 1,
-  },
+  fr: { articles },
 };
 
 export async function getActualitesContent(locale: string): Promise<ActualitesContent> {

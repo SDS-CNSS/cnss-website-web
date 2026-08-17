@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { User, Mail, MapPin, Inbox, Phone } from "lucide-react";
+import { Mail, MapPin, Inbox, Phone } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/layout/Container";
+import { NewsletterForm } from "@/components/sections/NewsletterForm";
 
 const QUICK_LINK_HREFS = [
   { key: "apiex", href: "https://apiex.bj/" },
@@ -70,32 +71,14 @@ export function Footer() {
             <p className="text-base font-medium text-body">
               {t("newsletter.description")}
             </p>
-            <form className="flex w-full flex-col items-start gap-2 rounded-[18px] bg-surface p-3 drop-shadow-[0px_2px_1px_rgba(0,0,0,0.1)]">
-              <label className="flex w-full items-center gap-3 rounded-md border border-line px-3 py-2">
-                <User className="size-4 text-muted" />
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder={t("newsletter.firstNamePlaceholder")}
-                  className="w-full text-base text-ink placeholder:text-muted focus:outline-none"
-                />
-              </label>
-              <label className="flex w-full items-center gap-3 rounded-md border border-line px-3 py-2">
-                <Mail className="size-4 text-muted" />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder={t("newsletter.emailPlaceholder")}
-                  className="w-full flex-1 text-base text-ink placeholder:text-muted focus:outline-none"
-                />
-              </label>
-              <button
-                type="submit"
-                className="w-full rounded-md border border-primary bg-primary px-8 py-2 text-paragraph-lg font-medium text-on-primary shadow-[0px_1px_1px_0px_rgba(0,0,0,0.1)]"
-              >
-                {t("newsletter.submit")}
-              </button>
-            </form>
+            <NewsletterForm
+              firstNamePlaceholder={t("newsletter.firstNamePlaceholder")}
+              emailPlaceholder={t("newsletter.emailPlaceholder")}
+              submitLabel={t("newsletter.submit")}
+              submittingLabel={t("newsletter.submitting")}
+              successMessage={t("newsletter.successMessage")}
+              errorMessage={t("newsletter.errorMessage")}
+            />
           </div>
 
           <div className="flex w-full flex-col items-start gap-4 lg:w-[18.5rem] lg:pb-[3.25rem]">
@@ -109,7 +92,7 @@ export function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-base font-medium text-ink"
+                    className="text-base font-medium text-ink transition-colors hover:underline"
                   >
                     {t(`quickLinks.${link.key}`)}
                   </a>
@@ -139,22 +122,28 @@ export function Footer() {
                   {t("boitePostaleValue")}
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+              <a
+                href={`tel:${t("telephoneValue").replace(/[^\d+]/g, "")}`}
+                className="flex items-center gap-3 text-base font-medium text-ink transition-colors hover:underline"
+              >
                 <Phone className="size-6 text-ink" />
-                <p className="text-base font-medium text-ink">
+                <p>
                   {t("telephone")}
                   <br />
                   {t("telephoneValue")}
                 </p>
-              </div>
-              <div className="flex items-center gap-3">
+              </a>
+              <a
+                href={`mailto:${t("emailValue")}`}
+                className="flex items-center gap-3 text-base font-medium text-ink transition-colors hover:underline"
+              >
                 <Mail className="size-6 text-ink" />
-                <p className="text-base font-medium text-ink">
+                <p>
                   {t("email")}
                   <br />
                   {t("emailValue")}
                 </p>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -167,7 +156,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-primary-800 underline"
+                  className="text-xs text-ink transition-colors hover:underline"
                 >
                   {t(`legal.${link.key}`)}
                 </Link>

@@ -1,19 +1,10 @@
 import { StatCard } from "@/components/ui/StatCard";
 import { Container } from "@/components/layout/Container";
+import { getNosChiffresContent } from "@/lib/content/nos-chiffres";
 
-const STATS = [
-  {
-    value: 70,
-    prefix: "+ ",
-    suffix: " ans",
-    label: "Au service de la société",
-  },
-  { value: 6, label: "Agences régionales sur le territoire national" },
-  { value: 60000, prefix: "+ ", label: "Pensionnés" },
-  { value: 100000, prefix: "+ ", label: "Travailleurs" },
-];
+export async function NosChiffres({ locale }: { locale: string }) {
+  const stats = await getNosChiffresContent(locale);
 
-export function NosChiffres() {
   return (
     <section className="flex w-full flex-col items-center bg-surface p-6 sm:p-10 lg:p-20">
       <Container className="flex flex-col items-center gap-6">
@@ -27,7 +18,7 @@ export function NosChiffres() {
           </p>
         </div>
         <div className="grid w-full grid-cols-2 items-stretch gap-4 sm:gap-6 lg:grid-cols-4">
-          {STATS.map((stat) => (
+          {stats.map((stat) => (
             <StatCard key={stat.label} {...stat} />
           ))}
         </div>

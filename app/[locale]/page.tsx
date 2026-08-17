@@ -8,16 +8,20 @@ import { Agencies } from "@/components/sections/Agencies";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { ActualitesCarousel } from "@/components/sections/ActualitesCarousel";
 
-export default function Home() {
+type Props = PageProps<"/[locale]">;
+
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+
   return (
     <>
       <Header />
       <main className="flex flex-1 flex-col items-center">
         <Hero />
         <Decouvrir />
-        <Services />
-        <NosChiffres />
-        <Agencies />
+        <Services locale={locale} />
+        <NosChiffres locale={locale} />
+        <Agencies locale={locale} />
         <CtaBanner />
         <ActualitesCarousel />
       </main>

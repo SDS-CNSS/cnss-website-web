@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
+import { ROUTES } from "@/lib/routes";
 
 type SearchBoxProps = {
   className?: string;
@@ -19,7 +20,7 @@ export function SearchBox({ className, onSubmitNavigate }: SearchBoxProps) {
     event.preventDefault();
     const query = value.trim();
     if (!query) return;
-    router.push(`/recherche?q=${encodeURIComponent(query)}`);
+    router.push(`${ROUTES.recherche}?q=${encodeURIComponent(query)}`);
     onSubmitNavigate?.();
   }
 
