@@ -44,4 +44,3 @@ next-env.d.ts
 # internal docs / design tokens / project instructions — not needed for the deployed site
 /docs/
 *.tokens.json
-CLAUDE.md
