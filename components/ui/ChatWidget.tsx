@@ -1,40 +1,77 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
+import type { ChatbotFlowContent, ChatbotLink, ChatbotNode, ChatbotOption } from "@/types/chatbot";
 
 type ChatMessage = {
   id: number;
   from: "bot" | "user";
   text: string;
+  link?: ChatbotLink;
 };
 
-const QUICK_REPLIES = [
-  "Employeur",
-  "Travailleur salarié",
-  "Retraité / pensionné",
-];
+type ChatWidgetProps = {
+  flow: ChatbotFlowContent;
+};
 
-const INITIAL_MESSAGES: ChatMessage[] = [
-  {
-    id: 1,
-    from: "bot",
-    text: "Bonjour ! Je suis l'assistant virtuel de la CNSS.",
-  },
-];
+const GREETING = "Bonjour ! Je suis l'assistant virtuel de la CNSS.";
 
-export function ChatWidget() {
+export function ChatWidget({ flow }: ChatWidgetProps) {
+  const rootNode = flow.nodes[0] ?? null;
+
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { id: 1, from: "bot", text: GREETING },
+  ]);
+  const [currentNode, setCurrentNode] = useState<ChatbotNode | null>(rootNode);
+  const [ended, setEnded] = useState(false);
 
-  function sendMessage(text: string) {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-    setMessages((prev) => [
-      ...prev,
-      { id: prev.length + 1, from: "user", text: trimmed },
-    ]);
+  function pushMessage(message: Omit<ChatMessage, "id">) {
+    setMessages((prev) => [...prev, { id: prev.length + 1, ...message }]);
+  }
+
+  function reset() {
+    setMessages([{ id: 1, from: "bot", text: GREETING }]);
+    setCurrentNode(rootNode);
+    setEnded(false);
+  }
+
+  function handleOptionClick(option: ChatbotOption) {
+    pushMessage({ from: "user", text: option.label });
+
+    if (option.nextNodeId) {
+      const nextNode = flow.nodes.find((node) => node.nodeId === option.nextNodeId);
+      if (nextNode) {
+        pushMessage({ from: "bot", text: nextNode.question });
+        setCurrentNode(nextNode);
+        return;
+      }
+    }
+
+    if (option.resultPage) {
+      pushMessage({
+        from: "bot",
+        text: "Voici la page qui devrait répondre à votre besoin :",
+        link: option.resultPage,
+      });
+      setCurrentNode(null);
+      setEnded(true);
+      return;
+    }
+
+    if (option.resultText) {
+      pushMessage({ from: "bot", text: option.resultText });
+      setCurrentNode(null);
+      setEnded(true);
+      return;
+    }
+
+    pushMessage({ from: "bot", text: flow.fallback.text, link: flow.fallback.cta });
+    setCurrentNode(null);
+    setEnded(true);
   }
 
   if (!open) {
@@ -93,9 +130,18 @@ export function ChatWidget() {
           message.from === "bot" ? (
             <div
               key={message.id}
-              className="max-w-[85%] self-start rounded-2xl rounded-tl-sm bg-surface-light-2 px-4 py-3 text-sm font-medium text-ink"
+              className="flex max-w-[85%] flex-col items-start gap-2 self-start rounded-2xl rounded-tl-sm bg-surface-light-2 px-4 py-3 text-sm font-medium text-ink"
             >
-              {message.text}
+              <span>{message.text}</span>
+              {message.link && (
+                <Link
+                  href={message.link.href}
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center gap-1 rounded-full border border-primary bg-surface px-3 py-1.5 text-sm font-semibold text-primary-800 transition-colors hover:bg-primary-100"
+                >
+                  {message.link.label}
+                </Link>
+              )}
             </div>
           ) : (
             <div
@@ -107,23 +153,32 @@ export function ChatWidget() {
           ),
         )}
 
-        <div className="flex max-w-[85%] flex-col gap-3 self-start rounded-2xl rounded-tl-sm bg-surface-light-2 px-4 py-3">
-          <p className="text-sm font-medium text-ink">
-            Pour mieux vous orienter, dites-moi qui vous êtes :
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {QUICK_REPLIES.map((reply) => (
-              <button
-                key={reply}
-                type="button"
-                onClick={() => sendMessage(reply)}
-                className="rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-primary hover:bg-primary-100 hover:text-primary-800"
-              >
-                {reply}
-              </button>
-            ))}
+        {currentNode && (
+          <div className="flex max-w-[85%] flex-col gap-3 self-start rounded-2xl rounded-tl-sm bg-surface-light-2 px-4 py-3">
+            <div className="flex flex-wrap gap-2">
+              {currentNode.options.map((option) => (
+                <button
+                  key={option.label}
+                  type="button"
+                  onClick={() => handleOptionClick(option)}
+                  className="rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-primary hover:bg-primary-100 hover:text-primary-800"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {ended && (
+          <button
+            type="button"
+            onClick={reset}
+            className="self-start rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-primary hover:bg-primary-100 hover:text-primary-800"
+          >
+            Recommencer
+          </button>
+        )}
       </div>
     </div>
   );

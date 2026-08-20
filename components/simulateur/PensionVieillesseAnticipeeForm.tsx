@@ -3,6 +3,15 @@
 import { useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
 import { SimulateurInfoBox } from "@/components/simulateur/SimulateurInfoBox";
+import { SimulateurResultCard } from "@/components/simulateur/SimulateurResultCard";
+import { InfoAlert } from "@/components/ui/InfoAlert";
+import { formatFCFA } from "@/lib/format";
+import {
+  calculerPensionAnticipee,
+  AGE_LEGAL_DEPART,
+  TAUX_ABATTEMENT_ANTICIPATION_PAR_AN,
+  type PensionAnticipeeCalculResult,
+} from "@/lib/simulateurs/pension";
 import type { PensionVieillesseAnticipeePageContent } from "@/types/simulateur";
 
 type PensionVieillesseAnticipeeFormProps = {
@@ -15,9 +24,6 @@ type PensionVieillesseAnticipeeFormProps = {
   submitLabel: string;
   disclaimer: string;
 };
-
-const AGE_LEGAL_DEPART = 60;
-const TAUX_ABATTEMENT_PAR_AN = 5;
 
 export function PensionVieillesseAnticipeeForm({
   title,
@@ -32,13 +38,30 @@ export function PensionVieillesseAnticipeeForm({
   const [age, setAge] = useState<number | undefined>(undefined);
   const [rmm, setRmm] = useState("");
   const [moisAssurance, setMoisAssurance] = useState("");
+  const [result, setResult] = useState<PensionAnticipeeCalculResult | null>(null);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const rmmValue = Number(rmm);
+    const moisAssuranceValue = Number(moisAssurance);
+
+    if (
+      age === undefined ||
+      !Number.isFinite(rmmValue) ||
+      rmmValue <= 0 ||
+      !Number.isFinite(moisAssuranceValue) ||
+      moisAssuranceValue <= 0
+    ) {
+      setResult(null);
+      return;
+    }
+
+    setResult(calculerPensionAnticipee(rmmValue, moisAssuranceValue, age));
   }
 
   const anneesAnticipation =
-    age !== undefined ? AGE_LEGAL_DEPART - age : undefined;
+    age !== undefined ? Math.max(0, AGE_LEGAL_DEPART - age) : undefined;
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-6">
@@ -81,7 +104,7 @@ export function PensionVieillesseAnticipeeForm({
                 Nombre d&apos;années d&apos;anticipation est de :{" "}
                 {anneesAnticipation} {anneesAnticipation === 1 ? "an" : "ans"}{" "}
                 et le taux d&apos;abattement est de :{" "}
-                {TAUX_ABATTEMENT_PAR_AN * anneesAnticipation} %
+                {TAUX_ABATTEMENT_ANTICIPATION_PAR_AN * anneesAnticipation} %
               </p>
             )}
           </div>
@@ -132,6 +155,21 @@ export function PensionVieillesseAnticipeeForm({
           {disclaimer}
         </p>
       </form>
+
+      {result &&
+        (result.type === "pension" ? (
+          <SimulateurResultCard
+            label="Montant estimé de votre pension anticipée"
+            montant={result.montantMensuelAnticipe}
+            details={[
+              { label: "Pension normale (avant abattement)", value: formatFCFA(result.montantMensuel) },
+              { label: `Anticipation (${result.anneesAnticipation} an${result.anneesAnticipation > 1 ? "s" : ""})`, value: `− ${result.tauxAbattement}%` },
+              { label: "Montant de l'abattement", value: `− ${formatFCFA(result.montantAbattement)}` },
+            ]}
+          />
+        ) : (
+          <InfoAlert variant="warning" title="Non éligible" description={result.motif} />
+        ))}
     </div>
   );
 }

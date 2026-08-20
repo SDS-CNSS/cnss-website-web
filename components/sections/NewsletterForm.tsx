@@ -10,6 +10,8 @@ type NewsletterFormProps = {
   submittingLabel: string;
   successMessage: string;
   errorMessage: string;
+  alreadySubscribedMessage: string;
+  serverErrorMessage: string;
 };
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -21,24 +23,51 @@ export function NewsletterForm({
   submittingLabel,
   successMessage,
   errorMessage,
+  alreadySubscribedMessage,
+  serverErrorMessage,
 }: NewsletterFormProps) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [errorText, setErrorText] = useState(errorMessage);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!firstName.trim() || !email.trim()) {
+      setErrorText(errorMessage);
       setStatus("error");
       return;
     }
 
     setStatus("submitting");
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    setStatus("success");
-    setFirstName("");
-    setEmail("");
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName: firstName.trim(), email: email.trim() }),
+      });
+
+      if (res.status === 409) {
+        setErrorText(alreadySubscribedMessage);
+        setStatus("error");
+        return;
+      }
+
+      if (!res.ok) {
+        setErrorText(serverErrorMessage);
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+      setFirstName("");
+      setEmail("");
+    } catch {
+      setErrorText(serverErrorMessage);
+      setStatus("error");
+    }
   }
 
   if (status === "success") {
@@ -86,7 +115,7 @@ export function NewsletterForm({
       </label>
 
       {status === "error" && (
-        <p className="px-1 text-sm font-medium text-red-600">{errorMessage}</p>
+        <p className="px-1 text-sm font-medium text-red-600">{errorText}</p>
       )}
 
       <button

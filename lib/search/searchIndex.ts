@@ -32,6 +32,8 @@ import { getPolitiqueConfidentialiteContent } from "@/lib/content/politique-conf
 import { getCguContent } from "@/lib/content/cgu";
 import { getCookiesContent } from "@/lib/content/cookies";
 
+import { getDynamicSearchEntries } from "@/lib/search/dynamicIndex";
+
 type SeoContent = { seo: { metaTitle: string; metaDescription: string } };
 
 function toEntry(
@@ -76,6 +78,7 @@ export async function getSearchIndex(locale: string): Promise<SearchEntry[]> {
     politiqueConfidentialite,
     cgu,
     cookies,
+    dynamicEntries,
   ] = await Promise.all([
     getImmatriculationContent(locale),
     getDeclarationPaiementCotisationsContent(locale),
@@ -104,6 +107,7 @@ export async function getSearchIndex(locale: string): Promise<SearchEntry[]> {
     getPolitiqueConfidentialiteContent(locale),
     getCguContent(locale),
     getCookiesContent(locale),
+    getDynamicSearchEntries(locale),
   ]);
 
   return [
@@ -226,5 +230,7 @@ export async function getSearchIndex(locale: string): Promise<SearchEntry[]> {
     ),
     toEntry(cgu, "/cgu", "Pages légales"),
     toEntry(cookies, "/cookies", "Pages légales"),
+
+    ...dynamicEntries,
   ];
 }

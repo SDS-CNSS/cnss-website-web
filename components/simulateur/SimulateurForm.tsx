@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import { SimulateurInfoBox } from "@/components/simulateur/SimulateurInfoBox";
 import { Select } from "@/components/ui/Select";
@@ -18,6 +18,10 @@ type SimulateurFormProps = {
   submitLabel: string;
   disclaimer: string;
   onCalculate?: (values: Record<string, string>) => void;
+  // Zone de résultat affichée sous le formulaire, gérée par le composant
+  // appelant (ex. PensionForm) qui recalcule et fournit ce nœud à chaque
+  // soumission — SimulateurForm reste agnostique du calcul métier.
+  result?: ReactNode;
 };
 
 export function SimulateurForm({
@@ -27,6 +31,7 @@ export function SimulateurForm({
   submitLabel,
   disclaimer,
   onCalculate,
+  result,
 }: SimulateurFormProps) {
   const [values, setValues] = useState<Record<string, string>>(
     Object.fromEntries(fields.map((field) => [field.id, ""])),
@@ -99,6 +104,8 @@ export function SimulateurForm({
           {disclaimer}
         </p>
       </form>
+
+      {result}
     </div>
   );
 }

@@ -18,7 +18,9 @@
       "submit": "S'abonner",
       "submitting": "Inscription...",
       "successMessage": "Merci ! Vous êtes bien inscrit(e) à la newsletter.",
-      "errorMessage": "Merci de renseigner votre prénom et une adresse mail valide."
+      "errorMessage": "Merci de renseigner votre prénom et une adresse mail valide.",
+      "alreadySubscribedMessage": "Cette adresse mail est déjà inscrite à la newsletter.",
+      "serverErrorMessage": "Une erreur est survenue. Veuillez réessayer plus tard."
     },
     "quickLinksTitle": "Liens Utiles",
     "quickLinks": {

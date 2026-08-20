@@ -3,7 +3,17 @@
 import { useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
 import { SimulateurInfoBox } from "@/components/simulateur/SimulateurInfoBox";
+import { SimulateurResultCard } from "@/components/simulateur/SimulateurResultCard";
+import { InfoAlert } from "@/components/ui/InfoAlert";
 import { Select } from "@/components/ui/Select";
+import { formatFCFA } from "@/lib/format";
+import {
+  calculerMajorationRetard,
+  parseDateJJMMAAAA,
+  parseMoisAnnee,
+  type MajorationRetardResult,
+  type MajorationRetardIneligible,
+} from "@/lib/simulateurs/majoration-retard";
 import type { MajorationRetardPageContent } from "@/types/simulateur";
 
 type MajorationRetardFormProps = {
@@ -52,6 +62,9 @@ export function MajorationRetardForm({
   disclaimer,
 }: MajorationRetardFormProps) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
+  const [result, setResult] = useState<
+    MajorationRetardResult | MajorationRetardIneligible | null
+  >(null);
 
   function updateField<K extends keyof FormState>(
     field: K,
@@ -62,6 +75,44 @@ export function MajorationRetardForm({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const cotisationDue = Number(form.cotisationDue);
+    if (!Number.isFinite(cotisationDue) || cotisationDue <= 0) {
+      setResult(null);
+      return;
+    }
+
+    let moisEcheance: number;
+    let anneeEcheance: number;
+
+    if (form.periode === "mensuel") {
+      const parsed = parseMoisAnnee(form.moisAnnee);
+      if (!parsed) {
+        setResult(null);
+        return;
+      }
+      moisEcheance = parsed.mois;
+      anneeEcheance = parsed.annee;
+    } else if (form.periode === "trimestriel") {
+      const annee = Number(form.annee);
+      if (!form.trimestre || !Number.isFinite(annee)) {
+        setResult(null);
+        return;
+      }
+      moisEcheance = Number(form.trimestre);
+      anneeEcheance = annee;
+    } else {
+      setResult(null);
+      return;
+    }
+
+    const datePaiement = parseDateJJMMAAAA(form.datePaiement);
+    if (!datePaiement) {
+      setResult(null);
+      return;
+    }
+
+    setResult(calculerMajorationRetard(cotisationDue, moisEcheance, anneeEcheance, datePaiement));
   }
 
   const cotisationSuffix =
@@ -229,6 +280,23 @@ export function MajorationRetardForm({
           {disclaimer}
         </p>
       </form>
+
+      {result &&
+        ("type" in result ? (
+          <InfoAlert variant="info" title="Aucune majoration" description={result.motif} />
+        ) : (
+          <SimulateurResultCard
+            label="Majoration de retard estimée"
+            montant={result.montantMajoration}
+            suffix=""
+            details={[
+              { label: "Mois de retard", value: `${result.moisRetard} mois` },
+              { label: "Cotisation due", value: formatFCFA(result.cotisationDue) },
+              { label: "Taux appliqué (1,5% × mois de retard)", value: `${result.tauxApplique}%` },
+              { label: "Montant total dû (cotisation + majoration)", value: formatFCFA(result.montantTotalDu) },
+            ]}
+          />
+        ))}
     </div>
   );
 }

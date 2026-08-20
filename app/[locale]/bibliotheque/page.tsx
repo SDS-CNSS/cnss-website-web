@@ -12,8 +12,6 @@ import { Container } from "@/components/layout/Container";
 
 type Props = PageProps<"/[locale]/bibliotheque">;
 
-const PER_PAGE = 6;
-
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: "Bibliothèque | CNSS Bénin",
@@ -26,20 +24,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BibliothequePage({ params, searchParams }: Props) {
   const { locale } = await params;
   const resolvedSearchParams = await searchParams;
-  const content = await getBibliothequeContent(locale);
-
-  const totalCount = content.documents.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE));
   const rawPage = resolvedSearchParams.page;
   const pageParam = typeof rawPage === "string" ? Number(rawPage) : 1;
-  const currentPage = Math.min(
-    Math.max(1, Number.isFinite(pageParam) ? pageParam : 1),
-    totalPages,
-  );
-  const documents = content.documents.slice(
-    (currentPage - 1) * PER_PAGE,
-    currentPage * PER_PAGE,
-  );
+  const requestedPage = Math.max(1, Number.isFinite(pageParam) ? pageParam : 1);
+
+  const content = await getBibliothequeContent(locale, requestedPage);
+  const { documents, currentPage, totalPages, totalCount } = content;
 
   function getHref(page: number) {
     return `/bibliotheque${page > 1 ? `?page=${page}` : ""}`;

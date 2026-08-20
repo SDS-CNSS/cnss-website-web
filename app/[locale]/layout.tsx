@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { ChatWidget } from "@/components/ui/ChatWidget";
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
 import { SITE_URL, buildMetadata } from "@/lib/seo";
+import { getChatbotFlowContent } from "@/lib/content/chatbot";
 import "../globals.css";
 
 const raleway = Raleway({
@@ -43,6 +44,11 @@ export default async function RootLayout({
     notFound();
   }
 
+  // Le chatbot est un plus, pas un critère de rendu de la page : si Strapi
+  // est indisponible ou que le contenu n'est pas encore publié, on masque
+  // simplement le widget plutôt que de casser tout le layout.
+  const chatbotFlow = await getChatbotFlowContent(locale).catch(() => null);
+
   return (
     <html
       lang={locale}
@@ -52,7 +58,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <BackToTopButton />
-        <ChatWidget />
+        {chatbotFlow && <ChatWidget flow={chatbotFlow} />}
       </body>
     </html>
   );

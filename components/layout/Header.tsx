@@ -7,6 +7,7 @@ import { SimulateursMegaMenu } from "@/components/layout/SimulateursMegaMenu";
 import { RessourcesMegaMenu } from "@/components/layout/RessourcesMegaMenu";
 import { MegaMenuProvider } from "@/components/layout/MegaMenuContext";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { StickyNavBar } from "@/components/layout/StickyNavBar";
 import { Container } from "@/components/layout/Container";
 import { SearchBox } from "@/components/layout/SearchBox";
 import { getNavigationContent } from "@/lib/content/navigation";
@@ -30,7 +31,7 @@ export async function Header() {
           <SearchBox className="w-[18.75rem]" />
         </Container>
       </div>
-      <div className="relative hidden w-full bg-subtle px-20 lg:block">
+      <StickyNavBar className="hidden w-full bg-subtle px-20 lg:block">
         <Container className="hidden items-center justify-between py-4 lg:flex">
           <nav className="flex items-center gap-8">
             <NavLink label={t("accueil")} href="/" />
@@ -44,7 +45,7 @@ export async function Header() {
           </nav>
           <Button href="/contact">{t("contact")}</Button>
         </Container>
-      </div>
+      </StickyNavBar>
     </header>
   );
 }

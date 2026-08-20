@@ -4,7 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
 import { SimulateurSidebarNav } from "@/components/simulateur/SimulateurSidebarNav";
-import { SimulateurForm } from "@/components/simulateur/SimulateurForm";
+import { PensionForm } from "@/components/simulateur/PensionForm";
 import { getPensionContent } from "@/lib/content/pension";
 import { Container } from "@/components/layout/Container";
 
@@ -40,7 +40,7 @@ export default async function PensionSimulateurPage({ params }: Props) {
             </aside>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <SimulateurForm
+              <PensionForm
                 title={content.formTitle}
                 infoBox={content.infoBox}
                 fields={content.fields}

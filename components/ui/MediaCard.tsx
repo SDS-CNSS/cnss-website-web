@@ -1,19 +1,19 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Play } from "lucide-react";
 
 type MediaCardProps = {
   title: string;
   type: "photo" | "video";
   thumbnail: string;
-  href: string;
+  onOpen: () => void;
 };
 
-export function MediaCard({ title, type, thumbnail, href }: MediaCardProps) {
+export function MediaCard({ title, type, thumbnail, onOpen }: MediaCardProps) {
   return (
-    <Link
-      href={href}
-      className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line-soft"
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group relative block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line-soft text-left"
     >
       <Image
         src={thumbnail}
@@ -34,6 +34,6 @@ export function MediaCard({ title, type, thumbnail, href }: MediaCardProps) {
       <p className="absolute inset-x-0 bottom-0 line-clamp-2 p-4 font-heading text-paragraph-lg font-semibold text-on-primary">
         {title}
       </p>
-    </Link>
+    </button>
   );
 }

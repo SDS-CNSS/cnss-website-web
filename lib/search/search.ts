@@ -1,6 +1,6 @@
 import type { SearchEntry } from "@/types/search";
 
-function normalize(value: string): string {
+export function normalize(value: string): string {
   return value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 }
 

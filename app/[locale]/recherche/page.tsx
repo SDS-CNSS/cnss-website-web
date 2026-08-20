@@ -89,7 +89,7 @@ export default async function RecherchePage({ params, searchParams }: Props) {
             {results.length > 0 && (
               <div className="flex flex-col">
                 {results.map((entry) => (
-                  <SearchResultItem key={entry.href} entry={entry} />
+                  <SearchResultItem key={entry.href} entry={entry} query={query} />
                 ))}
               </div>
             )}

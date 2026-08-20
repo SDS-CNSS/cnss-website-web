@@ -78,6 +78,8 @@ export function Footer() {
               submittingLabel={t("newsletter.submitting")}
               successMessage={t("newsletter.successMessage")}
               errorMessage={t("newsletter.errorMessage")}
+              alreadySubscribedMessage={t("newsletter.alreadySubscribedMessage")}
+              serverErrorMessage={t("newsletter.serverErrorMessage")}
             />
           </div>
 

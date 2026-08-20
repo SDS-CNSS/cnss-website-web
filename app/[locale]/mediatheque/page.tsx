@@ -5,14 +5,13 @@ import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
 import { ListFilters } from "@/components/ui/ListFilters";
 import { ResultsBar } from "@/components/ui/ResultsBar";
-import { MediaCard } from "@/components/ui/MediaCard";
+import { MediaGrid } from "@/components/mediatheque/MediaGrid";
+import { AlbumCard } from "@/components/ui/AlbumCard";
 import { Pagination } from "@/components/ui/Pagination";
 import { getMediathequeContent } from "@/lib/content/mediatheque";
 import { Container } from "@/components/layout/Container";
 
 type Props = PageProps<"/[locale]/mediatheque">;
-
-const PER_PAGE = 6;
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
@@ -26,23 +25,30 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MediathequePage({ params, searchParams }: Props) {
   const { locale } = await params;
   const resolvedSearchParams = await searchParams;
-  const content = await getMediathequeContent(locale);
-
-  const totalCount = content.items.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE));
   const rawPage = resolvedSearchParams.page;
   const pageParam = typeof rawPage === "string" ? Number(rawPage) : 1;
-  const currentPage = Math.min(
-    Math.max(1, Number.isFinite(pageParam) ? pageParam : 1),
-    totalPages,
-  );
-  const items = content.items.slice(
-    (currentPage - 1) * PER_PAGE,
-    currentPage * PER_PAGE,
-  );
+  const requestedPage = Math.max(1, Number.isFinite(pageParam) ? pageParam : 1);
+  const rawAlbumsPage = resolvedSearchParams.albumsPage;
+  const albumsPageParam = typeof rawAlbumsPage === "string" ? Number(rawAlbumsPage) : 1;
+  const requestedAlbumsPage = Math.max(1, Number.isFinite(albumsPageParam) ? albumsPageParam : 1);
+
+  const content = await getMediathequeContent(locale, requestedPage, requestedAlbumsPage);
+  const { albums, albumsPage, albumsTotalPages, items, currentPage, totalPages, totalCount } = content;
 
   function getHref(page: number) {
-    return `/mediatheque${page > 1 ? `?page=${page}` : ""}`;
+    const params = new URLSearchParams();
+    if (page > 1) params.set("page", String(page));
+    if (albumsPage > 1) params.set("albumsPage", String(albumsPage));
+    const qs = params.toString();
+    return `/mediatheque${qs ? `?${qs}` : ""}`;
+  }
+
+  function getAlbumsHref(page: number) {
+    const params = new URLSearchParams();
+    if (currentPage > 1) params.set("page", String(currentPage));
+    if (page > 1) params.set("albumsPage", String(page));
+    const qs = params.toString();
+    return `/mediatheque${qs ? `?${qs}` : ""}`;
   }
 
   return (
@@ -69,16 +75,34 @@ export default async function MediathequePage({ params, searchParams }: Props) {
               ]}
             />
 
+            {albums.length > 0 && (
+              <div className="flex w-full flex-col gap-8">
+                <ResultsBar
+                  label={`Albums | Page ${albumsPage} sur ${albumsTotalPages}`}
+                />
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {albums.map((album) => (
+                    <AlbumCard key={album.slug} album={album} />
+                  ))}
+                </div>
+
+                {albumsTotalPages > 1 && (
+                  <Pagination
+                    currentPage={albumsPage}
+                    totalPages={albumsTotalPages}
+                    getHref={getAlbumsHref}
+                  />
+                )}
+              </div>
+            )}
+
             <div className="flex w-full flex-col gap-8">
               <ResultsBar
                 label={`${totalCount} Médias | Page ${currentPage} sur ${totalPages}`}
               />
 
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {items.map((item) => (
-                  <MediaCard key={item.title} {...item} />
-                ))}
-              </div>
+              <MediaGrid items={items} />
             </div>
 
             <Pagination

@@ -4,7 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
 import { SimulateurSidebarNav } from "@/components/simulateur/SimulateurSidebarNav";
-import { SimulateurForm } from "@/components/simulateur/SimulateurForm";
+import { PensionSurvivantsConjointsForm } from "@/components/simulateur/PensionSurvivantsConjointsForm";
 import { getPensionSurvivantsConjointsContent } from "@/lib/content/pension-survivants-conjoints";
 import { Container } from "@/components/layout/Container";
 
@@ -42,7 +42,7 @@ export default async function PensionSurvivantsConjointsPage({
             </aside>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <SimulateurForm
+              <PensionSurvivantsConjointsForm
                 title={content.formTitle}
                 infoBox={content.infoBox}
                 fields={content.fields}

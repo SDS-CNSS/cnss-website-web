@@ -1,4 +1,5 @@
-import type { Locale } from "@/i18n/routing";
+import { strapiFetch } from "@/lib/strapi/client";
+import { mapDocumentToCard, type StrapiDocument } from "@/lib/strapi/mappers/document";
 
 export interface DocumentItem {
   title: string;
@@ -7,67 +8,38 @@ export interface DocumentItem {
   fileSize: string;
   viewHref: string;
   downloadHref: string;
+  fileName: string;
+  mimeType: string;
 }
 
 export interface BibliothequeContent {
   documents: DocumentItem[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 }
 
-const documents: DocumentItem[] = [
-  {
-    title: "Demande de prestations familiales",
-    tags: ["Formulaire de demande", "Allocations familiales"],
-    fileType: "PDF",
-    fileSize: "1.24 Mo",
-    viewHref: "/documents/demande-prestations-familiales.pdf",
-    downloadHref: "/documents/demande-prestations-familiales.pdf",
-  },
-  {
-    title: "Attestation de non-paiement des AF",
-    tags: ["Attestation", "Allocations familiales"],
-    fileType: "PDF",
-    fileSize: "1.24 Mo",
-    viewHref: "/documents/attestation-non-paiement-af.pdf",
-    downloadHref: "/documents/attestation-non-paiement-af.pdf",
-  },
-  {
-    title: "Demande de transfert de dossier allocataire",
-    tags: ["Formulaire de demande", "Allocations familiales"],
-    fileType: "PDF",
-    fileSize: "1.24 Mo",
-    viewHref: "/documents/demande-transfert-dossier-allocataire.pdf",
-    downloadHref: "/documents/demande-transfert-dossier-allocataire.pdf",
-  },
-  {
-    title: "Demande d'indemnités de congés maternité",
-    tags: ["Indemnités de congés de maternité", "Formulaire de demande"],
-    fileType: "PDF",
-    fileSize: "1.24 Mo",
-    viewHref: "/documents/demande-indemnites-conges-maternite.pdf",
-    downloadHref: "/documents/demande-indemnites-conges-maternite.pdf",
-  },
-  {
-    title: "Déclaration d'accident du travail",
-    tags: ["Accident du travail", "Formulaire de demande"],
-    fileType: "PDF",
-    fileSize: "1.24 Mo",
-    viewHref: "/documents/declaration-accident-travail.pdf",
-    downloadHref: "/documents/declaration-accident-travail.pdf",
-  },
-  {
-    title: "Demande de pension de vieillesse",
-    tags: ["Pensions", "Formulaire de demande"],
-    fileType: "PDF",
-    fileSize: "1.24 Mo",
-    viewHref: "/documents/demande-pension-vieillesse.pdf",
-    downloadHref: "/documents/demande-pension-vieillesse.pdf",
-  },
-];
+const PER_PAGE = 6;
 
-const contentByLocale: Record<Locale, BibliothequeContent> = {
-  fr: { documents },
-};
+export async function getBibliothequeContent(locale: string, page = 1): Promise<BibliothequeContent> {
+  const requestedPage = Math.max(1, page);
 
-export async function getBibliothequeContent(locale: string): Promise<BibliothequeContent> {
-  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
+  const { data, meta } = await strapiFetch<StrapiDocument[]>(
+    `/documents?locale=${locale}&sort=title:asc&populate[tags]=true&populate[file]=true` +
+      `&pagination[page]=${requestedPage}&pagination[pageSize]=${PER_PAGE}`,
+  );
+
+  const totalPages = Math.max(1, meta.pagination?.pageCount ?? 1);
+  const totalCount = meta.pagination?.total ?? data.length;
+
+  if (requestedPage > totalPages) {
+    return getBibliothequeContent(locale, totalPages);
+  }
+
+  return {
+    documents: data.map(mapDocumentToCard),
+    currentPage: requestedPage,
+    totalPages,
+    totalCount,
+  };
 }

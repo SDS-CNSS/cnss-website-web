@@ -7,6 +7,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { SearchBox } from "@/components/layout/SearchBox";
+import { StickyNavBar } from "@/components/layout/StickyNavBar";
 import { isNavPathActive } from "@/components/layout/navData";
 import type { MegaMenuTab, SimulateurTab, RessourceItem } from "@/types/navigation";
 
@@ -172,22 +173,24 @@ export function MobileNav({
 
   return (
     <div className="w-full lg:hidden">
-      <div className="flex items-center justify-between bg-surface px-4 py-4">
-        <Logo />
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          aria-label={open ? t("closeMenu") : t("openMenu")}
-          aria-expanded={open}
-          className="flex size-10 shrink-0 items-center justify-center rounded-md text-primary"
-        >
-          {open ? (
-            <X className="size-6" />
-          ) : (
-            <AlignJustify className="size-6" />
-          )}
-        </button>
-      </div>
+      <StickyNavBar forceVisible={open} className="bg-surface">
+        <div className="flex items-center justify-between px-4 py-4">
+          <Logo />
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? t("closeMenu") : t("openMenu")}
+            aria-expanded={open}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-primary"
+          >
+            {open ? (
+              <X className="size-6" />
+            ) : (
+              <AlignJustify className="size-6" />
+            )}
+          </button>
+        </div>
+      </StickyNavBar>
 
       <Collapse open={open}>
         <div className="flex flex-col bg-surface">

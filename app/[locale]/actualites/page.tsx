@@ -11,8 +11,6 @@ import { Container } from "@/components/layout/Container";
 
 type Props = PageProps<"/[locale]/actualites">;
 
-const PER_PAGE = 6;
-
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: "Actualités | CNSS Bénin",
@@ -25,20 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ActualitesPage({ params, searchParams }: Props) {
   const { locale } = await params;
   const resolvedSearchParams = await searchParams;
-  const content = await getActualitesContent(locale);
-
-  const totalCount = content.articles.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE));
   const rawPage = resolvedSearchParams.page;
   const pageParam = typeof rawPage === "string" ? Number(rawPage) : 1;
-  const currentPage = Math.min(
-    Math.max(1, Number.isFinite(pageParam) ? pageParam : 1),
-    totalPages,
-  );
-  const articles = content.articles.slice(
-    (currentPage - 1) * PER_PAGE,
-    currentPage * PER_PAGE,
-  );
+  const requestedPage = Math.max(1, Number.isFinite(pageParam) ? pageParam : 1);
+
+  const content = await getActualitesContent(locale, requestedPage);
+  const { articles, currentPage, totalPages, totalCount } = content;
 
   function getHref(page: number) {
     return `/actualites${page > 1 ? `?page=${page}` : ""}`;

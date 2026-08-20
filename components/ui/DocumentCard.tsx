@@ -1,6 +1,10 @@
-import Link from "next/link";
-import { File, Eye, Download } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { File, Eye, Download, Loader2 } from "lucide-react";
 import { Badge, type BadgeVariant } from "@/components/ui/Badge";
+import { DocumentPreviewModal } from "@/components/ui/DocumentPreviewModal";
+import { useDocumentDownload } from "@/hooks/useDocumentDownload";
 
 const TAG_VARIANTS: BadgeVariant[] = ["primary", "info", "warning", "neutral"];
 
@@ -11,6 +15,8 @@ type DocumentCardProps = {
   fileSize: string;
   viewHref: string;
   downloadHref: string;
+  fileName: string;
+  mimeType: string;
 };
 
 export function DocumentCard({
@@ -20,7 +26,12 @@ export function DocumentCard({
   fileSize,
   viewHref,
   downloadHref,
+  fileName,
+  mimeType,
 }: DocumentCardProps) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const { download, isDownloading } = useDocumentDownload();
+
   return (
     <div className="flex h-full flex-col gap-4 rounded-2xl border-2 border-primary bg-surface p-6 shadow-[0px_0px_4px_0px_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0px_10px_20px_0px_rgba(0,0,0,0.08)]">
       <div className="flex items-start gap-3">
@@ -40,22 +51,42 @@ export function DocumentCard({
         {fileType} - {fileSize}
       </p>
       <div className="mt-auto flex items-center gap-3">
-        <Link
-          href={viewHref}
+        <button
+          type="button"
+          onClick={() => setIsPreviewOpen(true)}
           className="flex flex-1 items-center justify-center gap-2 rounded-md border border-line px-4 py-2.5 text-base font-medium text-ink transition-colors hover:border-primary hover:text-primary"
         >
           Lire
           <Eye className="size-4" />
-        </Link>
-        <a
-          href={downloadHref}
-          download
-          className="flex flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-base font-bold text-on-primary transition-colors hover:bg-primary-hover"
+        </button>
+        <button
+          type="button"
+          onClick={() => download(downloadHref, fileName)}
+          disabled={isDownloading}
+          className="flex flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-base font-bold text-on-primary transition-colors hover:bg-primary-hover disabled:opacity-60"
         >
+          {isDownloading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Download className="size-4" />
+          )}
           TÉLÉCHARGER
-          <Download className="size-4" />
-        </a>
+        </button>
       </div>
+
+      {isPreviewOpen && (
+        <DocumentPreviewModal
+          document={{
+            title,
+            url: viewHref,
+            fileName,
+            extensionLabel: fileType,
+            sizeLabel: fileSize,
+            mimeType,
+          }}
+          onClose={() => setIsPreviewOpen(false)}
+        />
+      )}
     </div>
   );
 }

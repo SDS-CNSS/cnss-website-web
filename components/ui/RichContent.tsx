@@ -1,5 +1,8 @@
 import Image from "next/image";
+import ReactMarkdown, { type Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { RichContentBlock, RichContentListItem } from "@/types/rich-content";
+import { DocumentAttachment } from "@/components/ui/DocumentAttachment";
 
 type RichContentProps = {
   blocks: RichContentBlock[];
@@ -7,6 +10,43 @@ type RichContentProps = {
   paragraphClassName?: string;
   listItemClassName?: string;
 };
+
+function markdownComponents(paragraphClassName?: string): Components {
+  return {
+    p: ({ children }) => <p className={paragraphClassName}>{children}</p>,
+    strong: ({ children }) => (
+      <strong className="font-semibold text-ink">{children}</strong>
+    ),
+    em: ({ children }) => <em className="italic">{children}</em>,
+    del: ({ children }) => <del className="line-through">{children}</del>,
+    a: ({ href, children }) => (
+      <a href={href} className="text-link underline">
+        {children}
+      </a>
+    ),
+    ul: ({ children }) => (
+      <ul className={`list-disc pl-5 ${paragraphClassName ?? ""}`}>
+        {children}
+      </ul>
+    ),
+    ol: ({ children }) => (
+      <ol className={`list-decimal pl-5 ${paragraphClassName ?? ""}`}>
+        {children}
+      </ol>
+    ),
+    li: ({ children }) => <li>{children}</li>,
+    blockquote: ({ children }) => (
+      <blockquote className="border-l-2 border-line pl-4 italic">
+        {children}
+      </blockquote>
+    ),
+    code: ({ children }) => (
+      <code className="rounded bg-surface-muted px-1 py-0.5 text-sm">
+        {children}
+      </code>
+    ),
+  };
+}
 
 function renderListItem(item: string | RichContentListItem) {
   if (typeof item === "string") {
@@ -100,10 +140,16 @@ export function RichContent({
               </div>
             ))}
           </div>
+        ) : block.type === "document" && block.document ? (
+          <DocumentAttachment key={index} document={block.document} />
         ) : (
-          <p key={index} className={paragraphClassName}>
-            {block.text}
-          </p>
+          <ReactMarkdown
+            key={index}
+            remarkPlugins={[remarkGfm]}
+            components={markdownComponents(paragraphClassName)}
+          >
+            {block.text ?? ""}
+          </ReactMarkdown>
         ),
       )}
     </div>

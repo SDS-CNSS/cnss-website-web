@@ -1,12 +1,14 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { HighlightMatch } from "@/components/ui/HighlightMatch";
 import type { SearchEntry } from "@/types/search";
 
 type SearchResultItemProps = {
   entry: SearchEntry;
+  query: string;
 };
 
-export function SearchResultItem({ entry }: SearchResultItemProps) {
+export function SearchResultItem({ entry, query }: SearchResultItemProps) {
   return (
     <article className="flex flex-col gap-1 border-b border-line-soft py-6 first:pt-0 last:border-b-0 last:pb-0">
       <p className="text-sm text-body">
@@ -16,10 +18,12 @@ export function SearchResultItem({ entry }: SearchResultItemProps) {
         href={entry.href}
         className="group inline-flex w-fit items-center gap-1 font-heading text-xl font-semibold text-link hover:underline"
       >
-        {entry.title}
+        <HighlightMatch text={entry.title} query={query} />
         <ChevronRight className="size-4 shrink-0 text-link/70 transition-transform group-hover:translate-x-0.5" />
       </Link>
-      <p className="text-base text-body">{entry.description}</p>
+      <p className="text-base text-body">
+        <HighlightMatch text={entry.description} query={query} />
+      </p>
     </article>
   );
 }

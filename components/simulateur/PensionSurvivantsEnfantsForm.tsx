@@ -3,6 +3,13 @@
 import { useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
 import { SimulateurInfoBox } from "@/components/simulateur/SimulateurInfoBox";
+import { SimulateurResultCard } from "@/components/simulateur/SimulateurResultCard";
+import { formatFCFA } from "@/lib/format";
+import {
+  calculerPensionSurvivantsEnfantsMultiples,
+  calculerPensionSurvivantsEnfantsUnique,
+  type PensionSurvivantsEnfantsResult,
+} from "@/lib/simulateurs/pension-survivants-enfants";
 import type { PensionSurvivantsEnfantsPageContent } from "@/types/simulateur";
 
 type PensionSurvivantsEnfantsFormProps = {
@@ -35,15 +42,61 @@ export function PensionSurvivantsEnfantsForm({
   >(undefined);
   const [nombreOrphelinsPrisEnCompte, setNombreOrphelinsPrisEnCompte] =
     useState("");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-  }
+  const [result, setResult] = useState<PensionSurvivantsEnfantsResult | null>(
+    null,
+  );
 
   const nombreMineurs = Number(nombreOrphelinsMineurs || 0);
   const showTauxMineursMultiples = nombreMineurs > 1;
   const showOrphelinPereMere = nombreMineurs === 1;
   const showNombreOrphelinsPrisEnCompte = nombreMineurs !== 1;
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const pension = Number(pensionVieillesse);
+    if (!Number.isFinite(pension) || pension <= 0) {
+      setResult(null);
+      return;
+    }
+
+    if (showOrphelinPereMere) {
+      if (!orphelinPereMere) {
+        setResult(null);
+        return;
+      }
+      setResult(
+        calculerPensionSurvivantsEnfantsUnique(
+          pension,
+          orphelinPereMere === "oui",
+        ),
+      );
+      return;
+    }
+
+    if (nombreMineurs <= 0) {
+      setResult(null);
+      return;
+    }
+
+    const nombrePrisEnCompte = Number(nombreOrphelinsPrisEnCompte);
+    if (
+      !Number.isFinite(nombrePrisEnCompte) ||
+      nombrePrisEnCompte <= 0 ||
+      nombrePrisEnCompte > nombreMineurs
+    ) {
+      setResult(null);
+      return;
+    }
+
+    setResult(
+      calculerPensionSurvivantsEnfantsMultiples(
+        pension,
+        nombreMineurs,
+        nombrePrisEnCompte,
+      ),
+    );
+  }
 
   return (
     <div className="flex w-full flex-1 flex-col items-start gap-6">
@@ -147,6 +200,8 @@ export function PensionSurvivantsEnfantsForm({
                 id="nombreOrphelinsPrisEnCompte"
                 type="number"
                 inputMode="numeric"
+                min={1}
+                max={nombreMineurs || undefined}
                 placeholder={nombreOrphelinsPrisEnCompteField.placeholder}
                 value={nombreOrphelinsPrisEnCompte}
                 onChange={(event) =>
@@ -170,6 +225,26 @@ export function PensionSurvivantsEnfantsForm({
           {disclaimer}
         </p>
       </form>
+
+      {result && (
+        <SimulateurResultCard
+          label={
+            nombreMineurs === 1
+              ? "Montant estimé de la pension de l'orphelin"
+              : result.nombreOrphelinsPrisEnCompte === 1
+                ? `Chacun des ${nombreMineurs} enfants a droit à une pension de survivants égale à`
+                : `Pour le compte des ${result.nombreOrphelinsPrisEnCompte} enfants, vous avez droit à une pension de survivants égale à`
+          }
+          montant={result.montantTotal}
+          details={[
+            { label: "Pension de vieillesse du décédé", value: formatFCFA(result.pensionAssure) },
+            { label: "Taux appliqué", value: `${result.tauxApplique}%` },
+            ...(nombreMineurs > 1
+              ? [{ label: "Nombre d'orphelins pris en compte", value: `${result.nombreOrphelinsPrisEnCompte}` }]
+              : []),
+          ]}
+        />
+      )}
     </div>
   );
 }

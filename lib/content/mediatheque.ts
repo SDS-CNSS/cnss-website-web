@@ -1,4 +1,6 @@
-import type { Locale } from "@/i18n/routing";
+import { strapiFetch } from "@/lib/strapi/client";
+import { mapMediaItem, type StrapiMediaItem } from "@/lib/strapi/mappers/media-item";
+import { mapMediaAlbum, type StrapiMediaAlbum, type MediaAlbum } from "@/lib/strapi/mappers/media-album";
 
 export interface MediaItem {
   title: string;
@@ -8,52 +10,60 @@ export interface MediaItem {
 }
 
 export interface MediathequeContent {
+  albums: MediaAlbum[];
+  albumsPage: number;
+  albumsTotalPages: number;
   items: MediaItem[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 }
 
-const items: MediaItem[] = [
-  {
-    title: "Lancement de la nouvelle plateforme de déclaration simplifiée en ligne",
-    type: "video",
-    thumbnail: "/images/actu-comptes-cotisants.png",
-    href: "#",
-  },
-  {
-    title: "Cinq nouvelles agences en construction",
-    type: "photo",
-    thumbnail: "/images/agence-siege.png",
-    href: "#",
-  },
-  {
-    title: "Campagne de sensibilisation sur la prévention des risques professionnels",
-    type: "photo",
-    thumbnail: "/images/decouvrir-cnss.png",
-    href: "#",
-  },
-  {
-    title: "Employeurs de gens de maison : la déclaration devient obligatoire",
-    type: "video",
-    thumbnail: "/images/actu-gens-de-maison.png",
-    href: "#",
-  },
-  {
-    title: "Journée portes ouvertes au siège de la CNSS",
-    type: "photo",
-    thumbnail: "/images/agence-siege.png",
-    href: "#",
-  },
-  {
-    title: "Présentation du bilan annuel de la CNSS",
-    type: "video",
-    thumbnail: "/images/actu-comptes-cotisants.png",
-    href: "#",
-  },
-];
+const PER_PAGE = 6;
+const ALBUMS_PER_PAGE = 6;
 
-const contentByLocale: Record<Locale, MediathequeContent> = {
-  fr: { items },
-};
+export async function getMediathequeContent(
+  locale: string,
+  page = 1,
+  albumsPage = 1,
+): Promise<MediathequeContent> {
+  const requestedPage = Math.max(1, page);
+  const requestedAlbumsPage = Math.max(1, albumsPage);
 
-export async function getMediathequeContent(locale: string): Promise<MediathequeContent> {
-  return contentByLocale[locale as Locale] ?? contentByLocale.fr;
+  const [itemsRes, albumsRes] = await Promise.all([
+    // Seuls les médias sans album sont affichés ici — ceux rattachés à un
+    // album n'apparaissent que dans la page de détail de cet album.
+    strapiFetch<StrapiMediaItem[]>(
+      `/media-items?locale=${locale}&sort=createdAt:desc&filters[album][id][$null]=true` +
+        `&populate[thumbnail]=true&populate[file]=true` +
+        `&pagination[page]=${requestedPage}&pagination[pageSize]=${PER_PAGE}`,
+    ),
+    strapiFetch<StrapiMediaAlbum[]>(
+      `/media-albums?locale=${locale}&sort=date:desc` +
+        `&populate[coverImage]=true&populate[mediaItems][fields][0]=title` +
+        `&pagination[page]=${requestedAlbumsPage}&pagination[pageSize]=${ALBUMS_PER_PAGE}`,
+    ),
+  ]);
+
+  const totalPages = Math.max(1, itemsRes.meta.pagination?.pageCount ?? 1);
+  const totalCount = itemsRes.meta.pagination?.total ?? itemsRes.data.length;
+  const albumsTotalPages = Math.max(1, albumsRes.meta.pagination?.pageCount ?? 1);
+
+  if (requestedPage > totalPages || requestedAlbumsPage > albumsTotalPages) {
+    return getMediathequeContent(
+      locale,
+      Math.min(requestedPage, totalPages),
+      Math.min(requestedAlbumsPage, albumsTotalPages),
+    );
+  }
+
+  return {
+    albums: albumsRes.data.map(mapMediaAlbum),
+    albumsPage: requestedAlbumsPage,
+    albumsTotalPages,
+    items: itemsRes.data.map(mapMediaItem),
+    currentPage: requestedPage,
+    totalPages,
+    totalCount,
+  };
 }

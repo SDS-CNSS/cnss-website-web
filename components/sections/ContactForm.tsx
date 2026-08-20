@@ -4,12 +4,14 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import {
   User,
   Mail,
-  Phone,
   MessageSquare,
-  MapPin,
   AlignLeft,
   CheckCircle2,
 } from "lucide-react";
+import { PhoneInput } from "@/components/ui/PhoneInput";
+import { FileUploadField } from "@/components/ui/FileUploadField";
+import { Select } from "@/components/ui/Select";
+import type { ContactLocation } from "@/types/contact";
 
 type ContactFormProps = {
   title: string;
@@ -20,6 +22,7 @@ type ContactFormProps = {
   submittingLabel: string;
   successMessage: string;
   errorMessage: string;
+  locations: ContactLocation[];
 };
 
 type FormState = {
@@ -47,6 +50,7 @@ const REQUIRED_FIELDS: (keyof FormState)[] = [
   "prenoms",
   "email",
   "sujet",
+  "pointsContact",
   "message",
 ];
 
@@ -85,16 +89,21 @@ export function ContactForm({
   submittingLabel,
   successMessage,
   errorMessage,
+  locations,
 }: ContactFormProps) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [status, setStatus] = useState<Status>("idle");
+  // Incrémenté à chaque succès pour forcer le remount (donc la remise à zéro)
+  // du PhoneInput, qui gère son indicatif pays en état interne non contrôlé.
+  const [formVersion, setFormVersion] = useState(0);
 
   function updateField<K extends keyof FormState>(
     field: K,
     value: FormState[K],
   ) {
     setForm((prev) => ({ ...prev, [field]: value }));
-    if (status === "error") setStatus("idle");
+    if (status === "error" || status === "success") setStatus("idle");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -109,34 +118,34 @@ export function ContactForm({
     }
 
     setStatus("submitting");
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    setStatus("success");
-    setForm(INITIAL_STATE);
-  }
 
-  if (status === "success") {
-    return (
-      <div className="flex w-full flex-1 flex-col items-start gap-6">
-        <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">
-          {title}
-        </h2>
-        <div className="flex w-full flex-col items-center gap-4 rounded-2xl bg-surface p-10 text-center shadow-[0px_0px_10px_0px_rgba(0,0,0,0.05)]">
-          <div className="flex size-14 items-center justify-center rounded-full bg-surface-light text-primary">
-            <CheckCircle2 className="size-7" />
-          </div>
-          <p className="text-paragraph-lg font-medium text-ink">
-            {successMessage}
-          </p>
-          <button
-            type="button"
-            onClick={() => setStatus("idle")}
-            className="text-base font-semibold text-primary underline"
-          >
-            Envoyer un autre message
-          </button>
-        </div>
-      </div>
-    );
+    try {
+      const body = new FormData();
+      body.append("fullName", `${form.nom} ${form.prenoms}`.trim());
+      body.append("email", form.email);
+      if (form.telephone) body.append("phone", form.telephone);
+      body.append("subject", form.sujet);
+      body.append("contactPoint", form.pointsContact);
+      body.append("message", form.message);
+      attachments.forEach((file) => body.append("attachments", file, file.name));
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body,
+      });
+
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+      setForm(INITIAL_STATE);
+      setAttachments([]);
+      setFormVersion((version) => version + 1);
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -144,6 +153,14 @@ export function ContactForm({
       <h2 className="font-heading text-h3 font-bold text-primary-800 lg:text-h2">
         {title}
       </h2>
+
+      {status === "success" && (
+        <div className="flex w-full items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
+          <CheckCircle2 className="size-5 shrink-0 text-green-600" />
+          <p className="text-base font-medium text-green-800">{successMessage}</p>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         noValidate
@@ -193,19 +210,12 @@ export function ContactForm({
           </Field>
 
           <Field label="Téléphone" htmlFor="telephone">
-            <label className={fieldWrapperClassName}>
-              <Phone className="size-4 shrink-0 text-muted" />
-              <input
-                id="telephone"
-                type="tel"
-                placeholder="Téléphone"
-                value={form.telephone}
-                onChange={(event) =>
-                  updateField("telephone", event.target.value)
-                }
-                className={inputClassName}
-              />
-            </label>
+            <PhoneInput
+              key={formVersion}
+              id="telephone"
+              placeholder="90 00 00 00"
+              onChange={(value) => updateField("telephone", value)}
+            />
           </Field>
         </div>
 
@@ -224,19 +234,13 @@ export function ContactForm({
         </Field>
 
         <Field label="Points de contact concernés" htmlFor="pointsContact">
-          <label className={fieldWrapperClassName}>
-            <MapPin className="size-4 shrink-0 text-muted" />
-            <input
-              id="pointsContact"
-              type="text"
-              placeholder={contactPointPlaceholder}
-              value={form.pointsContact}
-              onChange={(event) =>
-                updateField("pointsContact", event.target.value)
-              }
-              className={inputClassName}
-            />
-          </label>
+          <Select
+            label={contactPointPlaceholder}
+            options={locations.map((location) => location.label)}
+            value={form.pointsContact || undefined}
+            onValueChange={(value) => updateField("pointsContact", value)}
+            className="h-12"
+          />
         </Field>
 
         <Field label="Message" htmlFor="message">
@@ -251,6 +255,10 @@ export function ContactForm({
               className="w-full resize-none text-base text-ink placeholder:text-muted focus:outline-none"
             />
           </label>
+        </Field>
+
+        <Field label="Pièces jointes (optionnel)" htmlFor="attachments">
+          <FileUploadField id="attachments" files={attachments} onChange={setAttachments} />
         </Field>
 
         {status === "error" && (

@@ -4,7 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageBanner } from "@/components/layout/PageBanner";
 import { SimulateurSidebarNav } from "@/components/simulateur/SimulateurSidebarNav";
-import { SimulateurForm } from "@/components/simulateur/SimulateurForm";
+import { AllocationSurvivantsForm } from "@/components/simulateur/AllocationSurvivantsForm";
 import { getAllocationSurvivantsContent } from "@/lib/content/allocation-survivants";
 import { Container } from "@/components/layout/Container";
 
@@ -40,7 +40,7 @@ export default async function AllocationSurvivantsPage({ params }: Props) {
             </aside>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <SimulateurForm
+              <AllocationSurvivantsForm
                 title={content.formTitle}
                 infoBox={content.infoBox}
                 fields={content.fields}

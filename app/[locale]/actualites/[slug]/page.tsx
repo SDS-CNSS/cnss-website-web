@@ -126,7 +126,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                     href="https://www.facebook.com/sharer/sharer.php"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex size-10 items-center justify-center rounded-md border border-line bg-surface"
+                    className="flex size-10 items-center justify-center rounded-md border border-primary bg-primary shadow-[0px_1px_1px_0px_rgba(0,0,0,0.1)]"
                   >
                     <Image
                       src="/icons/facebook.svg"
@@ -139,7 +139,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                     href="https://www.linkedin.com/sharing/share-offsite/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex size-10 items-center justify-center rounded-md border border-line bg-surface"
+                    className="flex size-10 items-center justify-center rounded-md border border-primary bg-primary shadow-[0px_1px_1px_0px_rgba(0,0,0,0.1)]"
                   >
                     <Image
                       src="/icons/linkedin.svg"

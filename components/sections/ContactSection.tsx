@@ -25,6 +25,7 @@ export function ContactSection({ coordonnees, form }: ContactSectionProps) {
           submittingLabel={form.submittingLabel}
           successMessage={form.successMessage}
           errorMessage={form.errorMessage}
+          locations={coordonnees.locations}
         />
       </Container>
     </section>

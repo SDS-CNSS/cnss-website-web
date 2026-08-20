@@ -14,8 +14,17 @@ export interface RichContentListItem {
   href?: string;
 }
 
+export interface RichContentDocument {
+  title: string;
+  url: string;
+  fileName: string;
+  extensionLabel: string;
+  sizeLabel: string;
+  mimeType: string;
+}
+
 export interface RichContentBlock {
-  type: "paragraph" | "list" | "orderedList" | "definitionList" | "gallery" | "paragraphWithLink";
+  type: "paragraph" | "list" | "orderedList" | "definitionList" | "gallery" | "paragraphWithLink" | "document";
   text?: string;
   items?: (string | RichContentListItem)[];
   definitions?: RichContentDefinition[];
@@ -24,4 +33,5 @@ export interface RichContentBlock {
   linkText?: string;
   href?: string;
   after?: string;
+  document?: RichContentDocument;
 }
